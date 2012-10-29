@@ -1,8 +1,5 @@
 
-
-
 ändra så att taper-func är en klass-variabel, och läggs till direkt på get_uv_grid()
-
 
 
 Byt namn på metoder i helper_functions
@@ -23,4 +20,4 @@ Lägg till plot-kod
 
 Separera power-spektrum-kod
 
-
+Fixa dokumentationskommentarer

@@ -24,6 +24,7 @@ class Parameters:
 		self._T = 400. #hours
 		self._num_tel = 10
 		self._num_pol = 1
+		self._uv_taper = None
 
 	def print_params(self):
 		''' Print the current values of all parameters '''
@@ -70,15 +71,6 @@ class Parameters:
 			fi = f
 		pickle.dump(self,fi)
 		fi.close()
-
-	#def  __getstate__(self):
-	#	''' This method ensures that _last_vis_noise and _last_vis_noise_cube
-	#	are not pickled '''
-	#	odict = self.__dict__.copy() 
-	#	del odict['_last_vis_noise']
-	#	del odict['_last_vis_noise_cube'] 
-	#	return odict
-
 
 	#-------------- Methods for calculating the uv grid	 --------------
 	def set_uv_grid_from_telescopes(self, tel_positions, ha_range, decl = 90, ha_step = 50, mirror_points=False):
@@ -169,11 +161,9 @@ class Parameters:
 
 		return weights
 
-	def apply_uv_taper(self, taper_func):
+	def set_uv_taper(self, taper_func):
 		''' 
-		Apply a tapering function to the uv grid. 
-		If the uv grid is recalculated, the tapering function
-		has to be applied again.
+		Set a uv tapering function.
 
 		Parameters:
 		* taper_func --- callable. A function of one variable - the 
@@ -182,12 +172,8 @@ class Parameters:
 
 		'''
 
-		if self.get_uv_grid() == None:
-			print 'No uv grid specified'
-			return
-
-		self._uv_grid = uvgrid.get_tapered_uv_grid(self._uv_grid, self._uv_range, taper_func)
-	
+		assert(hasattr(taper_func, '__call__'))
+		self._uv_taper = taper_func
 
 	#----------- Calculate noise in image and vis space-----
 	def get_visibility_slice(self, seed=None):
@@ -389,7 +375,10 @@ class Parameters:
 		return self._T
 
 	def get_uv_grid(self): 
-		return self._uv_grid
+		if self._uv_taper == None:
+			return self._uv_grid
+		else:
+			return = uvgrid.get_tapered_uv_grid(self._uv_grid, self._uv_range, taper_func)
 	def set_uv_grid(self, uv_grid): #See above for more setter methods
 		self._uv_grid = uv_grid
 
