@@ -1,0 +1,26 @@
+
+
+
+ändra så att taper-func är en klass-variabel, och läggs till direkt på get_uv_grid()
+
+
+
+Byt namn på metoder i helper_functions
+
+Låt dessa ta en annan bas-frekvens
+
+
+
+Låt Aeff och tsys sättas med funktioner
+
+
+
+Lägg till plot-kod
+
+     behöver plotta visibilitet, image-noise, uv-täckning
+
+
+
+Separera power-spektrum-kod
+
+
