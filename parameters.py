@@ -6,7 +6,8 @@ import helper_functions as hf
 import cPickle as pickle
 
 class Parameters:
-	''' This class acts as a storage unit for various instrument and experiment parameters '''
+	''' This class acts as a storage unit for various instrument and 
+	experiment parameters '''
 
 	#-----------  Handle parameters ------------
 
