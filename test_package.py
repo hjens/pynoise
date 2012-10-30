@@ -46,4 +46,7 @@ pn.plot_image_slice(par, image)
 pl.figure()
 pn.plot_uv_coverage_radial(par)
 
+pl.figure()
+pn.plot_psf(par)
+
 pl.show()

@@ -141,3 +141,26 @@ def plot_uv_coverage_radial(parameters, bins = 50, **kwargs):
 	pl.plot(bins[:-1], outdata, **kwargs)
 	pl.xlabel('$|\mathbf{u}|/\lambda$')
 	pl.ylabel('$uv$ density')
+
+
+def plot_psf(parameters, **kwargs):
+	'''
+	Make an image plot of the point spread function
+
+	Parameters:
+		* parameters (Parameters structure) --- the structure holding the 
+			parameters
+	'''
+
+	#Get the grid to plot
+	psf = parameters.get_psf()
+
+	#Get the extent
+	fov = parameters.get_fov()
+	extent = [-fov/2., fov/2., -fov/2., fov/2.]
+
+	#Plot it
+	pl.imshow(psf, extent=extent, **kwargs)
+	pl.xlabel('Degrees')
+	pl.ylabel('Degrees')
+	pl.title('Point spread function')
