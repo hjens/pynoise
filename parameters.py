@@ -178,7 +178,9 @@ class Parameters:
 			* noise --- complex array of same dimensions as uv grid, containing real and imaginary noise in mK'''
 		if uvgrid == None:
 			raise Exception('No uv grid specified')
-		noise = uvnoise.get_visibility_noise(self.get_tsys(), self.get_epsilon(), self.get_aeff(), self.get_dnu(), self.get_nu_c(), self.get_t(), self.get_num_tel(), self.get_uv_grid(), self.get_num_pol(), seed)
+		noise = uvnoise.get_visibility_noise(self.get_tsys(), self.get_epsilon(), 
+				self.get_aeff(), self.get_dnu(), self.get_nu_c(), self.get_t(), 
+				self.get_num_tel(), self.get_uv_grid(), self.get_num_pol(), seed)
 
 		return noise
 
@@ -223,7 +225,6 @@ class Parameters:
 		if seed != None:
 			np.random.seed(seed)
 
-		#TODO: verify that the dnu and frequency range are consistent
 		gridn = self.get_uv_grid().shape[0]
 		noise_cube = np.zeros((gridn,gridn,gridn)) + np.zeros((gridn,gridn,gridn))*1.j
 		for i in range(gridn):
