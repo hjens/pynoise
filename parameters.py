@@ -44,23 +44,6 @@ class Parameters:
 		print '\t * Number of polarizations: ', self._num_pol
 
 
-	def write_params_to_file(self,f):
-		if type(f) == str:
-			f = open(f, 'w')
-		f.write('Antenna efficiency (epsilon): %f\n'% self._epsilon)
-		f.write('System temperature (K): %f\n'% self._Tsys)
-		f.write('Bandwidth (MHz): %f\n'% self._dnu)
-		f.write('Effective area (m^2): %f\n' % self._Aeff)
-		f.write('Physical area (m^2): %f\n' % self._Aphys)
-		f.write('Central frequency (MHz): %f\n'% self._nu_c)
-		f.write('nu_max, nu_min (MHz): %d, %d\n' % ( self._nu_range) )
-		f.write('Integration time (hours): %f \n'% self._T)
-		f.write('Number of telescopes: %f\n'% self._num_tel)
-		f.write('uv range (u_max-u_min in wavelengths): %f\n' % self._uv_range)
-		f.write('Number of polarizations: %d'% self._num_pol)
-		f.close()
-
-
 	#--------------Save and load Parameters object --------------------
 	def save_to_file(self,f):
 		''' Save (pickle) parameters object to file f
