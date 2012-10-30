@@ -350,7 +350,7 @@ class Parameters:
 		self._Tsys = Tsys
 	def get_tsys(self):
 		if hasattr(self._Tsys, '__call__'):
-			return self._Tsys(self.get_wavel())
+			return self._Tsys(self.get_nu_c())
 		return self._Tsys
 
 	def set_dnu(self, dnu):
@@ -367,7 +367,7 @@ class Parameters:
 		self._Aeff = Aeff
 	def get_aeff(self):
 		if hasattr(self._Aeff, '__call__'):
-			return self._Aeff(self.wavel())
+			return self._Aeff(self.get_nu_c())
 		return self._Aeff
 
 	def set_nu_c(self, nu_c):
