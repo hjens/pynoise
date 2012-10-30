@@ -113,6 +113,7 @@ class Parameters:
 		grid = uvgrid.get_uv_grid_from_function(rho_uv, self.get_fov(), self.get_uv_range())
 		self._uv_grid = grid
 
+
 	def set_uv_grid_from_antenna_distribution(self, rho_ant, num_points_phi=301, num_points_r=2001):
 		'''
 		Calculate uv coverage grid from a function of r giving the 
@@ -150,11 +151,11 @@ class Parameters:
 		n = self._uv_grid.shape[0]
 		weights = np.zeros((n,n,n))
 		if los_axis == 0:
-			weights += self._uv_grid[np.newaxis,:,:]
+			weights += self.get_uv_grid()[np.newaxis,:,:]
 		elif los_axis == 1:
-			weights += self._uv_grid[:,np.newaxis,:]
+			weights += self.get_uv_grid()[:,np.newaxis,:]
 		elif los_axis == 2:
-			weights += self._uv_grid[:,:,np.newaxis]
+			weights += self.get_uv_grid()[:,:,np.newaxis]
 		else:
 			raise Exception('Invalid los axis')
 		weights *= weights
