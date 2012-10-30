@@ -33,7 +33,6 @@ def plot_visibility_slice(parameters, visibility_slice = None, **kwargs):
 			parameters.get_nu_c())
 
 	#Plot it
-	pl.figure()
 	pl.imshow(visibility_slice, extent=extent, **kwargs)
 	pl.xlabel('$u/\lambda$')
 	pl.ylabel('$v/\lambda$')
@@ -69,7 +68,6 @@ def plot_image_slice(parameters, image_slice = None, **kwargs):
 			parameters.get_nu_c())
 
 	#Plot it
-	pl.figure()
 	pl.imshow(image_slice, extent=extent, **kwargs)
 	pl.xlabel('Degrees')
 	pl.ylabel('Degrees')
@@ -99,3 +97,47 @@ def plot_uv_coverage(parameters, **kwargs):
 	pl.xlabel('$u/\lambda$')
 	pl.ylabel('$v/\lambda$')
 	pl.title('uv coverage')
+
+
+def plot_uv_coverage_radial(parameters, bins = 50, **kwargs):
+	'''
+	Plot the radially averaged uv coverage of a Parameters structure
+
+	Parameters:
+		* parameters (Parameters structure) --- the structure holding the 
+			parameters
+
+	Kwargs:
+		* bins (integer or sequence) --- if integer, make
+			linearly spaced bins, otherwise treat as bin edges
+	'''
+
+	#Get the uv_grid
+	uv_grid = parameters.get_uv_grid()
+
+	#Radially average
+	x,y = np.indices(uv_grid.shape)
+	center = np.array([(x.max()-x.min())/2.0, (y.max()-y.min())/2.0])
+	r = np.hypot(x-center[0],y-center[0])
+	pixel = float(parameters.get_uv_range())/float(uv_grid.shape[0])
+	u = r*pixel
+
+	if not hasattr(bins, '__iter__'):
+		bins = np.linspace(0, u.max(), bins)
+
+	#Bin the data
+	nbins = len(bins)-1
+	du = (bins[1:]-bins[:-1])/2.
+	outdata = np.zeros(nbins)
+	for ri in range(nbins):
+		rmin = bins[ri]
+		rmax = bins[ri+1]
+		idx = (u >= rmin) * (u < rmax)
+		outdata[ri] = np.mean(uv_grid[idx])
+
+	outdata[outdata != outdata] = 0.
+
+	#Plot it
+	pl.plot(bins[:-1], outdata, **kwargs)
+	pl.xlabel('$|\mathbf{u}|/\lambda$')
+	pl.ylabel('$uv$ density')

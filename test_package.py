@@ -18,7 +18,13 @@ par.set_uv_range(2.*860)
 par.set_fov(5.)
 par.set_num_pol(2)
 
-par.set_uv_grid_from_telescopes('/home/hjens/Powerpaper/lofar_coordinates.dat', ha_range=[-12,12])
+#par.set_uv_grid_from_telescopes('/home/hjens/Powerpaper/lofar_coordinates.dat', ha_range=[-12,12])
+
+r_core = 150.
+r_out = 1500.
+par.set_uv_range(r_out*2.)
+r_distr = lambda r: (r>10)*(r < r_core)+(r < r_out)*(r>r_core)*(r/r_core)**(-2.)
+par.set_uv_grid_from_function(r_distr)
 
 par.set_nu_range_cubic()
 
@@ -34,7 +40,10 @@ par.print_params()
 image  = par.get_image_slice()
 
 
-pl.imshow(image)
-pl.colorbar()
+pl.figure()
+pn.plot_image_slice(par, image)
+
+pl.figure()
+pn.plot_uv_coverage_radial(par)
 
 pl.show()
