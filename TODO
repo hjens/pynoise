@@ -17,3 +17,5 @@ Separera power-spektrum-kod
 Fixa dokumentationskommentarer
 
 Fixa varningar vid division i uvnoise
+
+Felmeddelanden om man inte sätter uv_grid
