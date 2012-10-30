@@ -33,6 +33,7 @@ def plot_visibility_slice(parameters, visibility_slice = None, **kwargs):
 			parameters.get_nu_c())
 
 	#Plot it
+	pl.figure()
 	pl.imshow(visibility_slice, extent=extent, **kwargs)
 	pl.xlabel('$u/\lambda$')
 	pl.ylabel('$v/\lambda$')
@@ -68,9 +69,33 @@ def plot_image_slice(parameters, image_slice = None, **kwargs):
 			parameters.get_nu_c())
 
 	#Plot it
+	pl.figure()
 	pl.imshow(image_slice, extent=extent, **kwargs)
 	pl.xlabel('Degrees')
 	pl.ylabel('Degrees')
 	cbar = pl.colorbar()
 	cbar.set_label('mK')
 	pl.title(title)
+
+
+def plot_uv_coverage(parameters, **kwargs):
+	'''
+	Make an image plot of the uv coverage of a Parameters structure
+
+	Parameters:
+		* parameters (Parameters structure) --- the structure holding the 
+			parameters
+	'''
+
+	#Get the grid to plot
+	uv_grid = parameters.get_uv_grid()
+
+	#Get the uv range
+	uvrange = parameters.get_uv_range()
+	extent = [-uvrange/2., uvrange/2., -uvrange/2., uvrange/2.]
+
+	#Plot it
+	pl.imshow(uv_grid, extent=extent, **kwargs)
+	pl.xlabel('$u/\lambda$')
+	pl.ylabel('$v/\lambda$')
+	pl.title('uv coverage')
