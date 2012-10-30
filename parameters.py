@@ -31,18 +31,18 @@ class Parameters:
 	def print_params(self):
 		''' Print the current values of all parameters '''
 		print 'Current parameter values:'
-		print '\t * Antenna efficiency (epsilon):', self._epsilon
-		print '\t * System temperature (K):', self._Tsys
-		print '\t * Channel width (MHz):', self._dnu
+		print '\t * Antenna efficiency (epsilon):', self.get_epsilon()
+		print '\t * System temperature (K):', self.get_tsys()
+		print '\t * Channel width (MHz):', self.get_dnu()
 		print '\t * Effective area (m^2):', self.get_aeff()
-		print '\t * Physical area (m^2):', self._Aphys
+		print '\t * Physical area (m^2):', self.get_aphys()
 		print '\t * Field of view (deg):', self.get_fov()
-		print '\t * Central frequency (MHz):', self._nu_c
-		print '\t * nu_max, nu_min (MHz):', self._nu_range
-		print '\t * Integration time (hours): ', self._T
-		print '\t * Number of telescopes: ', self._num_tel
-		print '\t * uv range (u_max-u_min in wavelengths):', self._uv_range
-		print '\t * Number of polarizations: ', self._num_pol
+		print '\t * Central frequency (MHz):', self.get_nu_c()
+		print '\t * nu_max, nu_min (MHz):', self.get_nu_range()
+		print '\t * Integration time (hours): ', self.get_t()
+		print '\t * Number of telescopes: ', self.get_num_tel()
+		print '\t * uv range (u_max-u_min in wavelengths):', self.get_uv_range()
+		print '\t * Number of polarizations: ', self.get_num_pol()
 
 
 	#--------------Save and load Parameters object --------------------
@@ -60,7 +60,8 @@ class Parameters:
 
 
 	#-------------- Methods for calculating the uv grid	 --------------
-	def set_uv_grid_from_telescopes(self, tel_positions, ha_range, decl = 90, ha_step = 50, mirror_points=False):
+	def set_uv_grid_from_telescopes(self, tel_positions, ha_range, decl = 90, 
+			ha_step = 50, mirror_points=False):
 		'''
 		Calculate the uv coverage of a telescope array and set the uv_array parameter.
 
@@ -347,6 +348,8 @@ class Parameters:
 	def set_tsys(self, Tsys):
 		self._Tsys = Tsys
 	def get_tsys(self):
+		if hasattr(self._Tsys, '__call__'):
+			return self._Tsys(self.get_wavel())
 		return self._Tsys
 
 	def set_dnu(self, dnu):
@@ -362,6 +365,8 @@ class Parameters:
 	def set_aeff(self, Aeff):
 		self._Aeff = Aeff
 	def get_aeff(self):
+		if hasattr(self._Aeff, '__call__'):
+			return self._Aeff(self.wavel())
 		return self._Aeff
 
 	def set_nu_c(self, nu_c):
@@ -396,12 +401,6 @@ class Parameters:
 		return self._nu_range
 	def set_nu_range(self, nu_range): #See also set_nu_range_cubic
 		self._nu_range = nu_range
-
-	def get_last_visibility_noise(self):
-		return self._last_vis_noise
-
-	def get_last_visibility_cube(self):
-		return self._last_vis_cube
 	
 	def get_num_pol(self):
 		return self._num_pol
