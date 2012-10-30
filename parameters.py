@@ -26,6 +26,7 @@ class Parameters:
 		self._num_pol = 1
 		self._uv_taper = None
 
+
 	def print_params(self):
 		''' Print the current values of all parameters '''
 		print 'Current parameter values:'
@@ -41,6 +42,7 @@ class Parameters:
 		print '\t * Number of telescopes: ', self._num_tel
 		print '\t * uv range (u_max-u_min in wavelengths):', self._uv_range
 		print '\t * Number of polarizations: ', self._num_pol
+
 
 	def write_params_to_file(self,f):
 		if type(f) == str:
@@ -72,6 +74,7 @@ class Parameters:
 		pickle.dump(self,fi)
 		fi.close()
 
+
 	#-------------- Methods for calculating the uv grid	 --------------
 	def set_uv_grid_from_telescopes(self, tel_positions, ha_range, decl = 90, ha_step = 50, mirror_points=False):
 		'''
@@ -96,8 +99,8 @@ class Parameters:
 			pos = tel_positions
 
 		#Calculate the grid
-		grid = uvgrid.get_uv_grid_from_telescopes(pos, self.get_fov(), self.get_nu_c(), ha_range, decl, ha_step, self.get_uv_range(), mirror_points)
-
+		grid = uvgrid.get_uv_grid_from_telescopes(pos, self.get_fov(), self.get_nu_c(),
+				ha_range, decl, ha_step, self.get_uv_range(), mirror_points) 
 		self._uv_grid = grid
 
 
@@ -137,6 +140,7 @@ class Parameters:
 				self.get_wavel(), num_points_phi, num_points_r)
 		self.set_uv_grid_from_function(func)
 
+
 	def get_uv_weights(self, los_axis=0):
 		''' Get weights for use with the powerspectrum routines
 		Parameters:
@@ -162,6 +166,7 @@ class Parameters:
 
 		return weights
 
+
 	def set_uv_taper(self, taper_func):
 		''' 
 		Set a uv tapering function.
@@ -175,6 +180,7 @@ class Parameters:
 
 		assert(hasattr(taper_func, '__call__'))
 		self._uv_taper = taper_func
+
 
 	#----------- Calculate noise in image and vis space-----
 	def get_visibility_slice(self, seed=None):
@@ -190,6 +196,7 @@ class Parameters:
 		noise = uvnoise.get_visibility_noise(self.get_tsys(), self.get_epsilon(), self.get_aeff(), self.get_dnu(), self.get_nu_c(), self.get_t(), self.get_num_tel(), self.get_uv_grid(), self.get_num_pol(), seed)
 
 		return noise
+
 
 	def get_image_slice(self, visibility_slice=None):
 		'''
@@ -207,6 +214,7 @@ class Parameters:
 		image = get_image.get_image(visibility_slice, self.get_fov())
 
 		return image
+
 
 	#----------- Make noise and image cubes ------------------
 	def get_visibility_cube(self, seed=None):
@@ -238,6 +246,7 @@ class Parameters:
 
 		return noise_cube
 
+
 	def get_image_cube(self, visibility_cube = None, seed=None):
 		'''
 		Calculate a noise cube in image space. The calculation is based on the 
@@ -267,15 +276,18 @@ class Parameters:
 		''' Get wavelength in m '''
 		return 300./self.get_nu_c()
 
+
 	def get_z(self):
 		''' Get redshift '''
 		return hf.nu_to_z(self.get_nu_c())
+
 
 	def get_fov(self):
 		''' Calculate FoV in degrees'''
 		d = np.sqrt(4.*self._Aphys/np.pi)
 		fov = self.get_wavel()/d
 		return fov*180./np.pi
+
 
 	def set_nu_range_cubic(self):
 		''' Set the parameters nu_range and dnu so that the
@@ -301,6 +313,7 @@ class Parameters:
 		gridn = self.get_uv_grid().shape[0]
 		self.set_dnu( (nu_lower-nu_upper)/float(gridn) )
 
+
 	def get_psf(self):
 		''' Calculate the point spread function based on the
 		current uv grid. The psf is normalized so that the sum
@@ -317,6 +330,7 @@ class Parameters:
 		psf /= psf.sum()
 		return psf
 
+
 	def set_fov(self, fov):
 		'''
 		Set the physical area to give the desired field of view
@@ -327,6 +341,7 @@ class Parameters:
 		fov *= np.pi/180.
 		a = (self.get_wavel()/(2.*fov))**2*np.pi
 		self.set_aphys(a)
+
 
 	def get_physical_size(self):
 		''' Calculate the physical size of the box
