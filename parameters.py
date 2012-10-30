@@ -382,7 +382,7 @@ class Parameters:
 
 	def get_uv_grid(self): 
 		if hasattr(self, '_uv_taper') and self._uv_taper != None:
-			return uvgrid.get_tapered_uv_grid(self._uv_grid, self._uv_range, taper_func)
+			return uvgrid.get_tapered_uv_grid(self._uv_grid, self._uv_range, self._uv_taper)
 		else:
 			return self._uv_grid
 	def set_uv_grid(self, uv_grid): #See above for more setter methods
