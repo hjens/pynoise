@@ -235,15 +235,18 @@ class Parameters:
 
 	def get_image_cube(self, visibility_cube = None, seed=None):
 		'''
-		Calculate a noise cube in image space. The calculation is based on the 
-		visibility_noise cube supplied. If this is None, it is calculated.
-		Parameters:
-		kwargs:
-			* seed = None --- the random seed. If None, the Python default is used
-			* visibility_cube = None --- the visibility cube to use as input. If None
-				a temporary cube will be calculated.
+		Calculate a noise cube in image space. 
+		
+		The calculation is based on the visibility_noise cube supplied. 
+		If this is None, a visibility noise cube is calculated.
+
+		Kwargs:
+			* seed (float): the random seed. If None, the Python default is used
+			* visibility_cube (numpy array) --- the visibility cube to use 
+			as input. If None, a temporary cube will be calculated.
+
 		Returns:
-			* Noise cube in image space with frequency as the first index.
+			(numpy array): Noise cube in image space with frequency as the first index.
 			
 		'''
 		if visibility_cube == None:
@@ -269,7 +272,14 @@ class Parameters:
 
 
 	def get_fov(self):
-		''' Calculate FoV in degrees'''
+		''' Calculate the field of view
+
+		This is calculated as the wavelength divided by the
+		physical diameter of an antenna.
+		
+		Returns:
+			float: The field of view in degrees
+		'''
 		d = np.sqrt(4.*self._Aphys/np.pi)
 		fov = self.get_wavel()/d
 		return fov*180./np.pi
