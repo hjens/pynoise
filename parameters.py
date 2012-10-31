@@ -204,18 +204,26 @@ class Parameters:
 
 
 	#----------- Make noise and image cubes ------------------
-	def get_visibility_cube(self, seed=None):
+	def get_visibility_cube(self, nu_dep = False, seed=None):
 		'''
-		Calculate a noise cube in visibility space. The extent along the frequency
+		Calculate a noise cube in visibility space. 
+		
+		The extent along the frequency
 		axis is determined by d_nu and nu_range. To make a cube, first run
 		set_nu_range_cubic()
 		TODO: allow for uv-coverage recalculation for each frequency
 
 		Parameters:
-		kwargs:
-			* seed = None --- the random seed. If None, the Python default is used
+
+		Kwargs:
+			* seed (float): the random seed. If None, the Python default is used
+			* nu_dep (bool): if True, the central frequency will change for each slice, 
+				going from nu_range[0] to nu_range[1]. If False, the current 
+				value of the central frequency will be used for the entire cube.  
+
 		Returns:
-			* Noise cube in visibility space with frequency as the first index.
+			* (complex numpy array): Noise cube in visibility space 
+				with frequency as the first index (lowest frequency first).
 			
 		'''
 
@@ -225,15 +233,29 @@ class Parameters:
 		if seed != None:
 			np.random.seed(seed)
 
+
 		gridn = self.get_uv_grid().shape[0]
 		noise_cube = np.zeros((gridn,gridn,gridn)) + np.zeros((gridn,gridn,gridn))*1.j
-		for i in range(gridn):
+
+		#Figure out frequency range, and save the old frequency
+		old_nu_c = self.get_nu_c()
+		if nu_dep:
+			freqs = np.linspace(self.get_nu_range()[1], 
+					self.get_nu_range()[0], gridn)
+		else:
+			freqs = np.ones(gridn)*self.get_nu_c()
+
+		#Generate cube
+		for i, nu in enumerate(freqs):
+			self.set_nu_c(nu)
 			noise_cube[i,:,:] = self.get_visibility_slice()
+
+		self.set_nu_c(old_nu_c)
 
 		return noise_cube
 
 
-	def get_image_cube(self, visibility_cube = None, seed=None):
+	def get_image_cube(self, visibility_cube = None, nu_dep = False, seed=None):
 		'''
 		Calculate a noise cube in image space. 
 		
@@ -241,16 +263,19 @@ class Parameters:
 		If this is None, a visibility noise cube is calculated.
 
 		Kwargs:
-			* seed (float): the random seed. If None, the Python default is used
-			* visibility_cube (numpy array) --- the visibility cube to use 
+			* visibility_cube (numpy array): the visibility cube to use 
+			* nu_dep (bool): if True, the central frequency will change for each slice, 
+				going from nu_range[0] to nu_range[1]. If False, the current 
+				value of the central frequency will be used for the entire cube.  
 			as input. If None, a temporary cube will be calculated.
+			* seed (float): the random seed. If None, the Python default is used
 
 		Returns:
 			(numpy array): Noise cube in image space with frequency as the first index.
 			
 		'''
 		if visibility_cube == None:
-			visibility_cube = self.get_visibility_cube(seed=seed)
+			visibility_cube = self.get_visibility_cube(nu_dep = nu_dep, seed=seed)
 
 		image_cube = np.zeros(visibility_cube.shape)
 		for i in range(image_cube.shape[0]):

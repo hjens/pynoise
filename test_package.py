@@ -37,11 +37,15 @@ par.set_aeff(aeff)
 
 par.print_params()
 
-image  = par.get_image_slice()
+image  = par.get_image_cube(nu_dep=True)
 
 
 pl.figure()
-pn.plot_image_slice(par, image)
+pn.plot_image_slice(par, image[0,:,:])
+print image[0,:,:].std()
+pl.figure()
+pn.plot_image_slice(par, image[-1,:,:])
+print image[-1,:,:].std()
 
 pl.figure()
 pn.plot_uv_coverage_radial(par)
