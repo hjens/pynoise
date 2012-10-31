@@ -48,8 +48,10 @@ class Parameters:
 	#--------------Save and load Parameters object --------------------
 	def save_to_file(self,f):
 		''' Save (pickle) parameters object to file f
+
 		Parameters:
-			* f --- binary file or filename
+
+			* f (binary file or filename): the file to write to
 		'''
 		if type(f) == str:
 			fi = open(f,'wb')
@@ -66,11 +68,13 @@ class Parameters:
 		Calculate the uv coverage of a telescope array and set the uv_array parameter.
 
 		Parameters:
+
 			* tel_positions --- array with telescope x,y,z positions in m, cartesian geocentric coordinates
 			Must have the shape (N,3) where N is the number of telescopes. Can also be a string specifying a text file with the telescope positions
 			* ha_range --- tuple with start and stop hour angle (in hours)
 
-		kwargs:
+		Kwargs:
+
 			* ha_step = 50 --- time resolution in uv calculation in seconds
 			* decl = 90 --- declination of the source, in degrees
 			* mirror_points = False --- whether to include (-u,-v) points
@@ -94,6 +98,7 @@ class Parameters:
 		Calculate the uv coverage based on a radial function and set the uv_array parameter.
 
 		Parameters:
+
 			* rho_uv --- callable taking one parameter. The function should give the baseline
 			density as a function of baseline length.
 		'''
@@ -110,10 +115,12 @@ class Parameters:
 		problems.
 
 		Parameters:
+
 			* rho_ant --- callable taking one parameter. This function should give the 
 			density of antennae in the array as a function of distance (in meters) 
 			from the array center
-		kwargs:
+		Kwargs:
+
 			* num_points_phi = 301 --- number of sample points for phi when integrating
 			* num_points_r = 10001 --- number of sample points for r when integrating
 
@@ -128,8 +135,7 @@ class Parameters:
 
 	def get_uv_weights(self, los_axis=0):
 		''' Get weights for use with the powerspectrum routines
-		Parameters:
-		kwargs:
+
 		Returns:
 			weights
 		'''
@@ -157,6 +163,7 @@ class Parameters:
 		Set a uv tapering function.
 
 		Parameters:
+
 		* taper_func --- callable. A function of one variable - the 
 			baseline length in wavelengths - which will be multiplied
 			with the uv grid
@@ -170,8 +177,8 @@ class Parameters:
 	#----------- Calculate noise in image and vis space-----
 	def get_visibility_slice(self, seed=None):
 		''' Calculate a noise realization in visibility space. Also save the noise internally for image calculation later.
-		Parameters:
-		kwargs:
+
+		Kwargs:
 			* seed = None --- the random seed. If None, the Python default is used
 
 		Returns:
@@ -189,7 +196,8 @@ class Parameters:
 		'''
 		Calculate noise in image space, from the last visibility noise calculated. If no visibility 
 		noise has been supplied, a slice will be calculated, but not returned.
-		kwargs:
+
+		Kwargs:
 			* visibility_slice = None --- the visibility slice to use as input. If none, a new
 			slice will be calculated
 
@@ -355,6 +363,7 @@ class Parameters:
 	def set_fov(self, fov):
 		'''
 		Set the physical area to give the desired field of view
+
 		Parameters:
 			* fov --- the field of view in degrees
 		'''
@@ -366,6 +375,7 @@ class Parameters:
 
 	def get_physical_size(self):
 		''' Calculate the physical size of the box
+
 		Returns:
 			box size in comoving Mpc '''
 		redsh = hf.nu_to_z(self.get_nu_c())
