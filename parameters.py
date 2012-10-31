@@ -32,17 +32,17 @@ class Parameters:
 		''' Print the current values of all parameters '''
 		print 'Current parameter values:'
 		print '\t * Antenna efficiency (epsilon):', self.get_epsilon()
-		print '\t * System temperature (K):', self.get_tsys()
-		print '\t * Channel width (MHz):', self.get_dnu()
-		print '\t * Effective area (m^2):', self.get_aeff()
-		print '\t * Physical area (m^2):', self.get_aphys()
-		print '\t * Field of view (deg):', self.get_fov()
-		print '\t * Central frequency (MHz):', self.get_nu_c()
-		print '\t * nu_max, nu_min (MHz):', self.get_nu_range()
-		print '\t * Integration time (hours): ', self.get_t()
-		print '\t * Number of telescopes: ', self.get_num_tel()
-		print '\t * uv range (u_max-u_min in wavelengths):', self.get_uv_range()
-		print '\t * Number of polarizations: ', self.get_num_pol()
+		print '\t * System temperature (tsys):', self.get_tsys(), ' K'
+		print '\t * Channel width (d_nu):', self.get_dnu(), ' MHz'
+		print '\t * Effective area (aeff):', self.get_aeff(), ' m^2'
+		print '\t * Physical area (aphys):', self.get_aphys() ,' m^2'
+		print '\t * Central frequency (nu_c):', self.get_nu_c(), ' MHz'
+		print '\t * Field of view (fov):', self.get_fov(), ' deg'
+		print '\t * nu_max, nu_min (nu_range):', self.get_nu_range(), ' MHz'
+		print '\t * Integration time (t): ', self.get_t(), ' hours'
+		print '\t * Number of telescopes (num_tel):', self.get_num_tel()
+		print '\t * u_max-u_min (uv_range):', self.get_uv_range(), ' wavelenghts'
+		print '\t * Number of polarizations (num_pol):', self.get_num_pol()
 
 
 	#--------------Save and load Parameters object --------------------
@@ -219,7 +219,7 @@ class Parameters:
 			
 		'''
 
-		if self._nu_range[1] >= self._nu_c or self._nu_range[0] <= self._nu_c:
+		if self._nu_range[1] >= self.get_nu_c() or self._nu_range[0] <= self.get_nu_c():
 			raise Exception('Invalid frequency range when calculating noise cube')
 
 		if seed != None:

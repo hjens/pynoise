@@ -2,6 +2,8 @@
 
 Byt namn på metoder i helper_functions
 
+Fixa konsekvens i hur man sätter parametrar
+
 Låt dessa ta en annan bas-frekvens
 
 
@@ -19,3 +21,7 @@ Fixa dokumentationskommentarer
 Fixa varningar vid division i uvnoise
 
 Felmeddelanden om man inte sätter uv_grid
+
+noise-cube ska kunna vara frekvensberoende
+
+

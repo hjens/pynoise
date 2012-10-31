@@ -9,11 +9,11 @@ def plot_visibility_slice(parameters, visibility_slice = None, **kwargs):
 	Only the real part is plotted
 
 	Parameters:
-		* parameters (Parameters structure) --- the structure holding the 
-			parameters
+		* parameters (Parameters structure) : the structure holding 
+		the parameters
 	Kwargs:
-		* visibility_slice = None --- the slice to plot. If none is given, a
-			slice is generated from the Parameters structure.
+		* visibility_slice (numpy array) : the slice to plot. If none is given, 
+		a slice is generated from the Parameters structure.
 
 	Additional kwargs are passed to imshow
 	'''
@@ -46,11 +46,11 @@ def plot_image_slice(parameters, image_slice = None, **kwargs):
 	Make an image plot of a image slice.
 
 	Parameters:
-		* parameters (Parameters structure) --- the structure holding the 
-			parameters
+		* parameters (Parameters structure) : the structure holding 
+		the parameters
 	Kwargs:
-		* image_slice = None --- the slice to plot. If none is given, a
-			slice is generated from the Parameters structure.
+		* image_slice (numpy array) : the slice to plot. If none is given, 
+		a slice is generated from the Parameters structure.
 
 	Additional kwargs are passed to imshow
 	'''
