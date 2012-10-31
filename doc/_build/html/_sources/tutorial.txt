@@ -1,7 +1,101 @@
 Tutorial
 ===================================
 
-Begin by creating a Parameters structure:
+.. note::
+    This tutorial assumes that you have :mod:`numpy` and :mod:`matplotlib` installed and imported.
+
+Setting up your Parameters
+-------------------------
+
+Everything in :mod:`pynoise` is done through the :class:`Parameters` class, which holds information about an interferometer, the measurement parameters, uv coverage etc. Begin by creating such an object:
 
 >>> import pynoise as pn
 >>> par = pn.Parameters()
+
+To see the current properties of the instrument:
+
+>>> par.print_params()
+Current parameter values:
+     * Antenna efficiency (epsilon): 1.0
+     * System temperature (K): 350.0
+     * Channel width (MHz): 1.0
+     * Effective area (m^2): 500.0
+     * Physical area (m^2): 500.0
+     * Field of view (deg): 4.54163853964
+     * Central frequency (MHz): 150.0
+     * nu_max, nu_min (MHz): [0.0, 0.0]
+     * Integration time (hours):  400.0
+     * Number of telescopes:  10
+     * uv range (u_max-u_min in wavelengths): 2000.0
+     * Number of polarizations:  1
+
+These values can all be changed. Let's set the integration time to 1000 hours:
+
+>>> par.set_t(1000)
+>>> par.print_params()
+Current parameter values:
+     * Antenna efficiency (epsilon): 1.0
+     * System temperature (K): 350.0
+     * Channel width (MHz): 1.0
+     * Effective area (m^2): 500.0
+     * Physical area (m^2): 500.0
+     * Field of view (deg): 4.54163853964
+     * Central frequency (MHz): 150.0
+     * nu_max, nu_min (MHz): [0.0, 0.0]
+     * Integration time (hours):  1000.0
+     * Number of telescopes:  10
+     * uv range (u_max-u_min in wavelengths): 2000.0
+     * Number of polarizations:  1
+
+To actually generate noise, we need to specify the uv coverage. This can be done in one of four different ways:
+
+* By specifying a list of telescope positions and an observation time.
+* By specifying a radial function rho(u) which gives the uv density as a function of distance from the center in the uv plane.
+* By specifying a radial function rho(d) which gives the density of antennas as a function of distance from the center in the real plane.
+* By specifying an arbitrary grid.
+
+Let's make a very simple uv coverage: constant coverage out to u = 500, then zero:
+
+>>> uv = lambda u : u < 500
+>>> par.set_uv_grid_from_function(uv)
+
+If you have :mod:`matplotlib` installed, you can visualize the uv coverage:
+
+>>> pn.plot_uv_coverage(par)
+
+or, say, the point spread function:
+
+>>> pn.plot_psf(par)
+
+When you are done setting up your :class:`Parameters` structure, you may want to save it for future use:
+
+>>> par.save_to_file('myparams.bin')
+
+Later on, you can restore the same parameters structure:
+
+>>> old_pars = pn.params_from_file('myparams.bin')
+
+Generating noise
+----------------
+
+Once your :class:`Parameters` is set up, you are ready to generate noise. To get a noise slice (from just the central frequency) in visibility space, in mK:
+
+>>> visnoise = par.get_visibility_slice()
+>>> real(visnoise).std()
+0.004831352715815241
+
+To get the noise in image space:
+
+>>> image_noise = par.get_image_slice(visnoise)
+>>> image_noise.std()
+122.13711713861612
+
+You can make a plot of the noise as such:
+
+>>> pn.plot_image_slice(par, image_noise)
+
+It is not necessary to manually generate visibility noise before going to the image plane. Simply doing:
+
+>>> image_noise = par.get_image_slice()
+
+will generate visibility noise automatically.

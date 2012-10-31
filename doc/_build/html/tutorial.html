@@ -55,10 +55,104 @@
             
   <div class="section" id="tutorial">
 <h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
-<p>Begin by creating a Parameters structure:</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This tutorial assumes that you have <tt class="xref py py-mod docutils literal"><span class="pre">numpy</span></tt> and <tt class="xref py py-mod docutils literal"><span class="pre">matplotlib</span></tt> installed and imported.</p>
+</div>
+<div class="section" id="setting-up-your-parameters">
+<h2>Setting up your Parameters<a class="headerlink" href="#setting-up-your-parameters" title="Permalink to this headline">¶</a></h2>
+<p>Everything in <a class="reference internal" href="parameters.html#module-pynoise" title="pynoise"><tt class="xref py py-mod docutils literal"><span class="pre">pynoise</span></tt></a> is done through the <tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt> class, which holds information about an interferometer, the measurement parameters, uv coverage etc. Begin by creating such an object:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pynoise</span> <span class="kn">as</span> <span class="nn">pn</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">par</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">Parameters</span><span class="p">()</span>
 </pre></div>
+</div>
+<p>To see the current properties of the instrument:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">par</span><span class="o">.</span><span class="n">print_params</span><span class="p">()</span>
+<span class="go">Current parameter values:</span>
+<span class="go">     * Antenna efficiency (epsilon): 1.0</span>
+<span class="go">     * System temperature (K): 350.0</span>
+<span class="go">     * Channel width (MHz): 1.0</span>
+<span class="go">     * Effective area (m^2): 500.0</span>
+<span class="go">     * Physical area (m^2): 500.0</span>
+<span class="go">     * Field of view (deg): 4.54163853964</span>
+<span class="go">     * Central frequency (MHz): 150.0</span>
+<span class="go">     * nu_max, nu_min (MHz): [0.0, 0.0]</span>
+<span class="go">     * Integration time (hours):  400.0</span>
+<span class="go">     * Number of telescopes:  10</span>
+<span class="go">     * uv range (u_max-u_min in wavelengths): 2000.0</span>
+<span class="go">     * Number of polarizations:  1</span>
+</pre></div>
+</div>
+<p>These values can all be changed. Let&#8217;s set the integration time to 1000 hours:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">par</span><span class="o">.</span><span class="n">set_t</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">par</span><span class="o">.</span><span class="n">print_params</span><span class="p">()</span>
+<span class="go">Current parameter values:</span>
+<span class="go">     * Antenna efficiency (epsilon): 1.0</span>
+<span class="go">     * System temperature (K): 350.0</span>
+<span class="go">     * Channel width (MHz): 1.0</span>
+<span class="go">     * Effective area (m^2): 500.0</span>
+<span class="go">     * Physical area (m^2): 500.0</span>
+<span class="go">     * Field of view (deg): 4.54163853964</span>
+<span class="go">     * Central frequency (MHz): 150.0</span>
+<span class="go">     * nu_max, nu_min (MHz): [0.0, 0.0]</span>
+<span class="go">     * Integration time (hours):  1000.0</span>
+<span class="go">     * Number of telescopes:  10</span>
+<span class="go">     * uv range (u_max-u_min in wavelengths): 2000.0</span>
+<span class="go">     * Number of polarizations:  1</span>
+</pre></div>
+</div>
+<p>To actually generate noise, we need to specify the uv coverage. This can be done in one of four different ways:</p>
+<ul class="simple">
+<li>By specifying a list of telescope positions and an observation time.</li>
+<li>By specifying a radial function rho(u) which gives the uv density as a function of distance from the center in the uv plane.</li>
+<li>By specifying a radial function rho(d) which gives the density of antennas as a function of distance from the center in the real plane.</li>
+<li>By specifying an arbitrary grid.</li>
+</ul>
+<p>Let&#8217;s make a very simple uv coverage: constant coverage out to u = 500, then zero:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">uv</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">u</span> <span class="p">:</span> <span class="n">u</span> <span class="o">&lt;</span> <span class="mi">500</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">par</span><span class="o">.</span><span class="n">set_uv_grid_from_function</span><span class="p">(</span><span class="n">uv</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you have <tt class="xref py py-mod docutils literal"><span class="pre">matplotlib</span></tt> installed, you can visualize the uv coverage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pn</span><span class="o">.</span><span class="n">plot_uv_coverage</span><span class="p">(</span><span class="n">par</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or, say, the point spread function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pn</span><span class="o">.</span><span class="n">plot_psf</span><span class="p">(</span><span class="n">par</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>When you are done setting up your <tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt> structure, you may want to save it for future use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">par</span><span class="o">.</span><span class="n">save_to_file</span><span class="p">(</span><span class="s">&#39;myparams.bin&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Later on, you can restore the same parameters structure:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">old_pars</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">params_from_file</span><span class="p">(</span><span class="s">&#39;myparams.bin&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="generating-noise">
+<h2>Generating noise<a class="headerlink" href="#generating-noise" title="Permalink to this headline">¶</a></h2>
+<p>Once your <tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt> is set up, you are ready to generate noise. To get a noise slice (from just the central frequency) in visibility space, in mK:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">visnoise</span> <span class="o">=</span> <span class="n">par</span><span class="o">.</span><span class="n">get_visibility_slice</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">real</span><span class="p">(</span><span class="n">visnoise</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+<span class="go">0.004831352715815241</span>
+</pre></div>
+</div>
+<p>To get the noise in image space:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">image_noise</span> <span class="o">=</span> <span class="n">par</span><span class="o">.</span><span class="n">get_image_slice</span><span class="p">(</span><span class="n">visnoise</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">image_noise</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+<span class="go">122.13711713861612</span>
+</pre></div>
+</div>
+<p>You can make a plot of the noise as such:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pn</span><span class="o">.</span><span class="n">plot_image_slice</span><span class="p">(</span><span class="n">par</span><span class="p">,</span> <span class="n">image_noise</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It is not necessary to manually generate visibility noise before going to the image plane. Simply doing:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">image_noise</span> <span class="o">=</span> <span class="n">par</span><span class="o">.</span><span class="n">get_image_slice</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>will generate visibility noise automatically.</p>
 </div>
 </div>
 
@@ -68,6 +162,15 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tutorial</a><ul>
+<li><a class="reference internal" href="#setting-up-your-parameters">Setting up your Parameters</a></li>
+<li><a class="reference internal" href="#generating-noise">Generating noise</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
                         title="previous chapter">Welcome to pynoise&#8217;s documentation!</a></p>
