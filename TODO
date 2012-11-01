@@ -2,16 +2,8 @@
 
 Byt namn på metoder i helper_functions
 
-Fixa konsekvens i hur man sätter parametrar
 
 Låt dessa ta en annan bas-frekvens
-
-
-
-Lägg till plot-kod
-
-     behöver plotta visibilitet, image-noise, uv-täckning, psf
-
 
 
 Separera power-spektrum-kod

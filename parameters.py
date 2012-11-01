@@ -32,9 +32,15 @@ class Parameters:
 		''' Print the current values of all parameters '''
 		print 'Current parameter values:'
 		print '\t * Antenna efficiency (epsilon):', self.get_epsilon()
-		print '\t * System temperature (tsys):', self.get_tsys(), ' K'
+		if hasattr(self._Tsys, '__call__'):
+			print '\t * System temperature (tsys):', self.get_tsys(), ' K, at nu_c'
+		else:
+			print '\t * System temperature (tsys):', self.get_tsys(), ' K'
 		print '\t * Channel width (d_nu):', self.get_dnu(), ' MHz'
-		print '\t * Effective area (aeff):', self.get_aeff(), ' m^2'
+		if hasattr(self._Aeff, '__call__'):
+			print '\t * Effective area (aeff):', self.get_aeff(), ' m^2, at nu_c'
+		else:
+			print '\t * Effective area (aeff):', self.get_aeff(), ' m^2'
 		print '\t * Physical area (aphys):', self.get_aphys() ,' m^2'
 		print '\t * Central frequency (nu_c):', self.get_nu_c(), ' MHz'
 		print '\t * Field of view (fov):', self.get_fov(), ' deg'
