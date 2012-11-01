@@ -86,7 +86,14 @@ precalc_table_cdist = np.array([  3367.12811226,   3425.76323848,   3484.9819894
 #**************** Cosmological functions ******************
 
 def lumdist(z, k=0):
-	''' Calculate the luminosity distance for redshift z '''
+	''' Calculate the luminosity distance for redshift z 
+
+	Parameters:
+		* z (float or numpy array): the redshift or redshifts
+
+	Returns:
+		The luminosity distance(s) in Mpc
+	'''
 
 	if not (type(z) is np.ndarray): #Allow for passing a single z
 		z = np.array([z])
@@ -116,9 +123,14 @@ def lumdist(z, k=0):
 
 def zang(dl, z):
 	''' Calculate the angular size of an object. 
-	dl is the physical size in kpc
-	z is the redshift of the object
-	The result is given in arcseconds '''
+	
+	Parameters:
+		* dl (float): the physical size in kpc
+		* z (float): the redshift of the object
+	
+	Returns:
+		Angle in arcseconds
+	'''
 
 	angle = 180./(3.1415)*3600.*dl*(1+z)**2/(1000*lumdist(z))
 	#if len(angle) == 1:
@@ -126,15 +138,30 @@ def zang(dl, z):
 	return angle
 
 def cdist(z):
-	''' Calculate the comoving distance to redshift z in Mpc '''
+	''' Calculate the comoving distance 
+
+	Parameters:
+		z (float): redshift
+
+	Returns:
+		Comoving distance in Mpc
+	'''
 	Ez_func = lambda x: 1./np.sqrt(Omega0*(1.+x)**3+lam)
 	dist = c/H0 * quadrature(Ez_func, 0, z)[0]
 	return dist
 
 def cdist_to_z(dist):
 	''' Calculate the redshift correspoding to the given redshift. 
-	Uses a precalculated table for interpolation. Only valid for 
-	0 < z < 100 '''
+
+	Parameters:
+		* dist (float): the distance in comoving Mpc
+
+	Returns:
+		redshift corresponding to the distance.
+
+		.. note::
+		Uses a precalculated table for interpolation. Only valid for 
+		0 < z < 100 '''
 
 	func = interp1d(precalc_table_cdist, precalc_table_z, kind='cubic')
 	z = func(dist)
@@ -144,31 +171,78 @@ def cdist_to_z(dist):
 #**************** Various useful functions ************
 
 def nu_to_z(nu21):
-	''' Convert 21 cm frequency in MHz to redshift '''
+	''' Convert 21 cm frequency in MHz to redshift 
+
+	Parameters:
+		* nu21 (float): redshifted 21 cm frequency in MHz
+
+	Returns:
+		Redshift
+	'''
 	return nu0/nu21-1
 
 def z_to_nu(z):
-	''' Get the 21 cm frequency that corresponds to redshift z '''
+	''' Get the 21 cm frequency that corresponds to redshift z 
+
+	Parameters:
+		* z (float): redshifts
+
+	Returns:
+		redshifted 21 cm frequency in MHz
+	'''
 	return nu0/(1.+z)
 
-def nu_to_cdist(nu):
-	''' Calculate the comoving distance to a given frequency '''
-	redsh = nu_to_z(nu)
+def nu_to_cdist(nu21):
+	''' Calculate the comoving distance to a given 21 cm frequency 
+
+	Parameters:
+		* nu21 (float): redshifted 21 cm frequency in MHz
+
+	Returns:
+		Comoving distance in Mpc
+	
+	'''
+	redsh = nu_to_z(nu21)
 	return cdist(redsh)
 
 def uv_to_k(uv, z):
 	''' Convert a point in uv space to the corresponding 
-	k value. '''
+	k value. 
+
+	Parameters:
+		* uv (float): distance in uv space
+		* z (float): redshift
+
+	Returns:
+		k value in Mpc^-1
+	'''
 	return 2.*np.pi*uv/cdist(z)
 
 def k_to_uv(k, z):
-	''' Convert a k value to the corresponding uv value '''
+	''' Convert a k value to the corresponding uv value 
+
+	Parameters:
+		* k (float): k value in Mpc^-1
+		* z (float): redshift
+
+	Returns:
+		distance in uv space
+	
+	'''
 	return k*cdist(z)/(2.*np.pi)
 
 def get_bandwidth(z_central, depth_comov):
 	''' Get the frequency difference between the near and far edge
-	of a box at central redshift z_central and length along the 
-	z axis of depth_comov in cMpc '''
+	of a box.
+
+	Paremeters:
+		* z_central (float): central redshift of the box
+		* depth_comov (float): comoving depth of the box in Mpc
+
+	Returns:
+		Frequency difference between the near and far edge of the box 
+		in Mpc
+	'''
 	
 	dist = cdist(z_central)
 
@@ -182,12 +256,17 @@ def get_bandwidth(z_central, depth_comov):
 
 def get_smoothed_slice(data, psf, periodic=False):
 	''' Smooth a data slice with a given point spread function
+
 		Parameters:
-			* data --- the array to smooth. Must have dimensions NxN 
-			* psf --- the point spread function. Must have dimensions NxN
-		kwargs:
-			* periodic = True --- if True, the input data will be assumed to have
+			* data (numpy array): the array to smooth. Must have dimensions NxN 
+			* psf (numpy array): the point spread function. Must have dimensions NxN
+
+		Kwargs:
+			* periodic (bool): if True, the input data will be assumed to have
 				periodic boundary conditions
+
+		Returns:
+			the smoothed array
 	'''
 	from scipy import signal
 
@@ -215,14 +294,20 @@ def get_smoothed_slice(data, psf, periodic=False):
 
 def apply_psf(data, psf, los_axis=0, periodic=False):
 	''' Smooth a data array with a given point spread function
+
 		Parameters:
-			* data --- the array to smooth. May have dimensions NxN or NxNxM
-			* psf --- the point spread function. Must have dimensions NxN
-		kwargs:
-			* los_axis = 0 --- if data is three-dimensional, this determines the 
+			* data (numpy array): the array to smooth. May have dimensions NxN or NxNxM
+			* psf (numpy array): the point spread function. Must have dimensions NxN
+
+		Kwargs:
+			* los_axis (int): if data is three-dimensional, this determines the 
 				frequency axis
-			* periodic = True --- if True, the input data will be assumed to have
+			* periodic (bool): if True, the input data will be assumed to have
 				periodic boundary conditions
+
+		Returns:
+			Smoothed box
+
 	'''
 	from scipy import signal
 
@@ -249,9 +334,14 @@ def apply_psf(data, psf, los_axis=0, periodic=False):
 #**************** Load a pickled object *************
 
 def params_from_file(f):
-	''' Load (pickle) parameters object from file f
+	''' Load (unpickle) parameters object from file f
+	
 	Parameters:
-		* f --- binary file object or filename string
+		* f (binary file object or filename string): the file
+		to load from.
+
+	Returns:
+		The loaded object
 	'''
 	if type(f) == str:
 		fi = open(f,'rb')
