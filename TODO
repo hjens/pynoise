@@ -1,16 +1,9 @@
 
-
 Byt namn på metoder i helper_functions
-
 
 Låt dessa ta en annan bas-frekvens
 
-
-Separera power-spektrum-kod
-
 Fixa dokumentationskommentarer
-
-Fixa varningar vid division i uvnoise
 
 Felmeddelanden om man inte sätter uv_grid
 

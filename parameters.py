@@ -247,17 +247,21 @@ class Parameters:
 		if seed != None:
 			np.random.seed(seed)
 
-
-		gridn = self.get_uv_grid().shape[0]
-		noise_cube = np.zeros((gridn,gridn,gridn)) + np.zeros((gridn,gridn,gridn))*1.j
-
 		#Figure out frequency range, and save the old frequency
 		old_nu_c = self.get_nu_c()
 		if nu_dep:
-			freqs = np.linspace(self.get_nu_range()[1], 
-					self.get_nu_range()[0], gridn)
+			#freqs = np.linspace(self.get_nu_range()[1], 
+					#self.get_nu_range()[0], gridn)
+			freqs = np.arange(self.get_nu_range()[1], 
+					self.get_nu_range()[0], self.get_dnu())
+			depth = len(freqs)
 		else:
-			freqs = np.ones(gridn)*self.get_nu_c()
+			depth = self.get_uv_grid().shape[0]
+			freqs = np.ones(depth)*self.get_nu_c()
+
+		#Make cube to hold noise
+		gridn = self.get_uv_grid().shape[0]
+		noise_cube = np.zeros((depth,gridn,gridn)) + np.zeros((depth,gridn,gridn))*1.j
 
 		#Generate cube
 		for i, nu in enumerate(freqs):
