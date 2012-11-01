@@ -5,17 +5,17 @@ def get_visibility_noise(Tsys, epsilon, Aeff, dnu, nu_c, T, n_tel, uvgrid, num_p
 	''' Calculate a noise realization in visibility space.
 
 	Parameters:
-		* Tsys --- System temperature in K
-		* epsilon --- Antenna efficiency (0 < epsilon < 1)
-		* Aeff --- Effective area in m^2
-		* dnu --- Frequency resolution in MHz
-		* nu_c --- Central frequency in MHz
-		* T --- Observing time in hours
-		* n_tel --- Number of telescopes
-		* uvgrid --- uv grid
+		* Tsys (float): System temperature in K
+		* epsilon (float): Antenna efficiency (0 < epsilon < 1)
+		* Aeff (float): Effective area in m^2
+		* dnu (float): Frequency resolution in MHz
+		* nu_c (float): Central frequency in MHz
+		* T (float): Observing time in hours
+		* n_tel (int): Number of telescopes
+		* uvgrid (numpy array): uv grid
 	kwargs:
-		* num_pol = 1 --- number of polarizations
-		* seed = None -- random number seed, if None use random seed
+		* num_pol (int): number of polarizations
+		* seed (int): random number seed, if None use random seed
 
 	Returns:
 		complex array of dimensions NxM, containing real and imaginary noise in mK'''
@@ -40,6 +40,7 @@ def get_visibility_noise(Tsys, epsilon, Aeff, dnu, nu_c, T, n_tel, uvgrid, num_p
 	if seed:
 		np.random.seed(seed)
 	sqrtuv = np.sqrt(uvgrid*total_time)
+	sqrtuv[np.abs(sqrtuv) < 1.e-15] = np.nan
 	noise = np.zeros(uvgrid.shape,dtype=np.complex)
 	Vre = dV*np.random.normal(0., 1., uvgrid.shape)/sqrtuv
 	Vim = dV*np.random.normal(0., 1., uvgrid.shape)/sqrtuv
