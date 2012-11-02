@@ -4,14 +4,19 @@ from helper_functions import *
 
 
 def power_spectrum_nd(input_array, box_dims):
-	''' Calculate the power spectrum of input_array and return it as an n-dimensional array,
-	where n is the number of dimensions in input_array.
-	The input array does not need to be cubical, but the individual cells must have the same
-	size along all axes
+	''' Calculate the n-dimensional power spectrum 
+
+	The input array does not need to be cubical, but the 
+	individual cells must have the same size along all axes.
+
 	Parameters:
-		* input_array --- the array to calculate PS from
-		* box_dims  --- tuple with the size of the box in comoving Mpc along each axis
-	kwargs:
+		* input_array (numpy array): the array to calculate PS from
+		* box_dims  (list-like) tuple with the size of the box in 
+		comoving Mpc along each axis
+
+	Returns:
+		The power spectrum as a numpy array of the same dimensions
+		as the input array.
 	'''
 
 
@@ -88,20 +93,32 @@ def radial_average(input_array, box_dims, bins=10, weights=None):
 
 def power_spectrum_sphav(input_array_nd, box_size, bins=100, dimensionless=False, weights = None):
 	''' 
-	Calculate the power spectrum of input_array_nd (2 or 3 dimensions)
-	and return the spherically averaged power spectrum
+	Calculate the spherically averaged power spectrum 
+
 	Parameters:
-		* input_array_nd  --- the data array
-		* box_size  --- size of the box in comoving Mpc. Can be a single number
-		or a tuple giving the size along each axis
-	kwargs:
-		* bins = 100 --- can be an array of k bin edges or a number of bins.
-		* dimensionless = False --- if true, the dimensionless powerspectrum, k^3/(2pi^2)P(k),
-		* weights = None --- 
-		is returned
+		* input_array_nd  (numpy array): the data array
+		* box_size  (float or list-like): size of the box in comoving Mpc. 
+		Can be a single number or a tuple giving the size along each axis
+	Kwargs:
+		* bins (int or list-like): can be an array of k bin edges or a number of bins.
+		* dimensionless (bool) if true, the dimensionless powerspectrum, k^3/(2pi^2)P(k),
+			is returned
+		* weights (numpy array): if given, these are the weights applied to the points
+			when calculating the power spectrum. Can be calculated in the 
+			parameter structure.
 
 	Returns
-		P(k) or Delta(k), k (in Mpc^-1) 
+		Tuple with ps, k
+
+		ps is the power spectrum, P(k) or Delta^2(k) and k is the mid points
+		of the k bins in Mpc^-1
+
+	Example (generate noise, calculate and plot power spectrum):
+		>>> par = pn.params_from_file('myparams.bin')
+		>>> image = par.get_image_cube()
+		>>> bins = 10**np.linspace(-2,1,15)
+		>>> ps,k = power_spectrum_sphav(image, bins=bins)
+		>>> pl.loglog(k,ps)
 	'''
 
 	if hasattr(box_size, "__iter__"):
