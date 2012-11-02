@@ -7,7 +7,7 @@ Tutorial
 Setting up your Parameters
 --------------------------
 
-Almost everything in :mod:`pynoise` is done through the :class:`Parameters` class, which holds information about an interferometer, the measurement parameters, uv coverage etc. Begin by creating such an object:
+Almost everything in :mod:`pynoise` is done through the :class:`Parameters` class, which holds information about an interferometer, the measurement parameters, uv coverage etc. Start up your favorite Python interpreter, such as `IPython <http://ipython.org/>`_, and begin by creating such an object:
 
 >>> import pynoise as pn
 >>> par = pn.Parameters()
