@@ -1,0 +1,10 @@
+Helper functions
+================
+
+There are a number of helper functions to calculate various useful cosmological quantities.
+
+.. note::
+    Some of the helper functions assume that observations concern the redshifted 21 cm line.
+
+.. automodule:: pynoise.helper_functions
+    :members:

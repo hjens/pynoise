@@ -1,0 +1,39 @@
+.. pynoise documentation master file, created by
+   sphinx-quickstart on Wed Oct 31 11:52:33 2012.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to pynoise's documentation!
+===================================
+
+About pynoise
+-------------
+:mod:`pynoise` is a simple Python module for calculating thermal noise of a radio interferometer, specifically suited for high-redshift 21 cm observations. It is based on code written by Kanan Datta. The module is made to be used either as part of a Python script, or interactively from the Python shell.
+
+It can generate realistic noise in both image and visibility space, and calculate noise power spectra.
+
+Installation
+------------
+Download from `GitHub <https://github.com/hjens/pynoise>`_ and make sure the directory is in your PYTHONPATH. You must have :mod:`numpy` and :mod:`scipy` installed. For the built-in plotting routines, :mod:`matplotlib` is required.
+
+Documentation
+-------------
+
+Contents:
+
+.. toctree::
+    :maxdepth: 2
+
+    tutorial
+    parameters
+    plotting
+    powerspectrum
+    misc
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+

@@ -1,0 +1,8 @@
+The Parameters structure
+=======================
+
+Description of the Parameters structure. 
+
+.. autoclass:: pynoise.Parameters
+    :members: 
+    :undoc-members:

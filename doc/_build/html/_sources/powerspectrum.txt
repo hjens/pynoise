@@ -1,0 +1,5 @@
+Power spectrum routines
+=======================
+
+.. autofunction:: pynoise.power_spectrum_sphav
+.. autofunction:: pynoise.power_spectrum_nd

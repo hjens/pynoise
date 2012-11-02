@@ -1,0 +1,118 @@
+Tutorial
+===================================
+
+.. note::
+    This tutorial assumes that you have :mod:`numpy` and :mod:`matplotlib` installed and imported.
+
+Setting up your Parameters
+--------------------------
+
+Almost everything in :mod:`pynoise` is done through the :class:`Parameters` class, which holds information about an interferometer, the measurement parameters, uv coverage etc. Begin by creating such an object:
+
+>>> import pynoise as pn
+>>> par = pn.Parameters()
+
+To see the current properties of the instrument:
+
+>>> par.print_params()
+Current parameter values:
+     * Antenna efficiency (epsilon): 1.0
+     * System temperature (tsys): 350.0  K
+     * Channel width (d_nu): 1.0  MHz
+     * Effective area (aeff): 500.0  m^2
+     * Physical area (aphys): 500.0  m^2
+     * Central frequency (nu_c): 150.0  nu_c
+     * Field of view (fov): 4.54163853964  deg
+     * nu_max, nu_min (nu_range): [0.0, 0.0]  MHz
+     * Integration time (t):  400.0  hours
+     * Number of telescopes (num_tel): 10
+     * u_max-u_min (uv_range): 2000.0  wavelenghts
+     * Number of polarizations (num_pol): 1
+
+These values all have associated get/set methods. You can find out the name of these by looking at the variable name in parentheses on each line in the output from :func:`print_params`. For example, to get and set the number of polarizations, you would use :func:`get_num_pol` and :func:`set_num_pol` respectively.
+
+The system temperature and effective area can be set as functions of frequency rather than as constant numbers. If this is done, they are updated every time the central frequency is changed:
+
+>>> par.set_tsys(lambda nu: 140. + 60*(nu/300.)**(-2.55))
+>>> par.get_tsys()
+491.3805670269501
+>>> par.set_nu_c(200.)
+>>> par.get_tsys()
+308.72675766277416
+
+To actually generate noise, we need to specify the uv coverage. This can be done in one of four different ways:
+
+* By specifying a list of telescope positions and an observation time.
+* By specifying a radial function rho(u) which gives the uv density as a function of distance from the center in the uv plane.
+* By specifying a radial function rho(d) which gives the density of antennas as a function of distance from the center in the real plane.
+* By specifying an arbitrary grid.
+
+Let's make a very simple uv coverage: constant coverage out to u = 500, then zero:
+
+>>> uv = lambda u : u < 500
+>>> par.set_uv_grid_from_function(uv)
+
+If you have :mod:`matplotlib` installed, you can visualize the uv coverage:
+
+>>> pn.plot_uv_coverage(par)
+
+or, say, the point spread function:
+
+>>> pn.plot_psf(par)
+
+When you are done setting up your :class:`Parameters` structure, you may want to save it for future use:
+
+>>> par.save_to_file('myparams.bin')
+
+Later on, you can restore the same parameters structure:
+
+>>> old_pars = pn.params_from_file('myparams.bin')
+
+Generating noise
+----------------
+
+Once your :class:`Parameters` is set up, you are ready to generate noise. To get a noise slice (from just the central frequency) in visibility space, in mK:
+
+>>> visnoise = par.get_visibility_slice()
+>>> real(visnoise).std()
+0.004831352715815241
+
+To get the noise in image space:
+
+>>> image_noise = par.get_image_slice(visnoise)
+>>> image_noise.std()
+122.13711713861612
+
+You can make a plot of the noise as such:
+
+>>> pn.plot_image_slice(par, image_noise)
+
+It is not necessary to manually generate visibility noise before going to the image plane. Simply doing:
+
+>>> image_noise = par.get_image_slice()
+
+will generate visibility noise automatically.
+
+There are also convenience functions to generate noise cubes. To do this, you must first specify a frequency range. This will specify that our cube will go from 120 MHz to 180 MHz:
+
+>>> par.set_nu_range([120., 180.])
+>>> noise_cube = par.get_image_cube()
+
+.. warning::
+    The noise cube calculations do not take the frequency dependence of the uv coverage into account. To do this, you must build your own cube and recalculate the uv coverage for each slice.
+
+Calculating power spectra
+-------------------------
+:mod:`pynoise` also includes an easy-to-use routine to calculate the spherically averaged power spectrum from the generated noise.
+
+>>> par.set_nu_range_cubic()
+>>> image_noise = par.get_image_cube()
+>>> image_w = par.get_physical_size()
+>>> delta, k = pn.power_spectrum_sphav(image_noise, image_w, bins=50, dimensionless=True)
+>>> loglog(k, ps)
+
+If you want more control over your k bins, you can specify the bins as a list of bin edges:
+
+>>> kbins = 10**linspace(-2,1,15)
+>>> ps, k = pn.power_spectrum_sphav(image_noise, image_w, bins=kbins)
+>>> loglog(k, ps)

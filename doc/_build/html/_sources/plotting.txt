@@ -1,0 +1,13 @@
+Visualizing results
+===================
+
+You may of course use the visualization software of your choice to plot the results, but :mod:`pynoise` also includes some simple routines for some of the most common tasks. These routines all rely on :mod:`matplotlib` for the plotting. 
+
+.. note::
+    If you are running these commands from a Python shell, you may also need to run the :mod:`matplotlib` command :func:`show` to actually show the plots. This depends on your local setup.
+
+.. autofunction:: pynoise.plot_visibility_slice
+.. autofunction:: pynoise.plot_psf
+.. autofunction:: pynoise.plot_image_slice
+.. autofunction:: pynoise.plot_uv_coverage
+.. autofunction:: plot_uv_coverage_radial
