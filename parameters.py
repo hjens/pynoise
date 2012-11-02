@@ -7,7 +7,11 @@ import cPickle as pickle
 
 class Parameters:
 	''' This class acts as a storage unit for various instrument and 
-	experiment parameters '''
+	experiment parameters.
+
+	It is used to generate the noise realizations in image and visibility
+	space.
+	'''
 
 	#-----------  Handle parameters ------------
 
@@ -115,23 +119,22 @@ class Parameters:
 
 	def set_uv_grid_from_antenna_distribution(self, rho_ant, num_points_phi=301, num_points_r=2001):
 		'''
-		Calculate uv coverage grid from a function of r giving the 
+		Calculate and set the uv coverage grid from a function of r giving the 
 		antenna density as a function of distance from the array center.
+
 		Still somewhat experimental. Please check the results for numerical
 		problems.
 
 		Parameters:
 
-			* rho_ant --- callable taking one parameter. This function should give the 
+			* rho_ant (callable taking one parameter): This function should give the 
 			density of antennae in the array as a function of distance (in meters) 
 			from the array center
+
 		Kwargs:
+			* num_points_phi (int): number of sample points for phi when integrating
+			* num_points_r (int): number of sample points for r when integrating
 
-			* num_points_phi = 301 --- number of sample points for phi when integrating
-			* num_points_r = 10001 --- number of sample points for r when integrating
-
-		Returns:
-			* uv grid, normalized so that the integral is 1
 		'''
 
 		func = uvgrid.get_rho_uv_from_antenna_distribution(rho_ant, self.get_fov(), self.get_uv_range(), 
@@ -141,6 +144,9 @@ class Parameters:
 
 	def get_uv_weights(self, los_axis=0):
 		''' Get weights for use with the powerspectrum routines
+
+		Kwargs:
+			* los_axis (int): the line-of-sight axis
 
 		Returns:
 			weights
@@ -169,8 +175,7 @@ class Parameters:
 		Set a uv tapering function.
 
 		Parameters:
-
-		* taper_func --- callable. A function of one variable - the 
+			* taper_func (callable): A function of one variable - the 
 			baseline length in wavelengths - which will be multiplied
 			with the uv grid
 
@@ -182,13 +187,15 @@ class Parameters:
 
 	#----------- Calculate noise in image and vis space-----
 	def get_visibility_slice(self, seed=None):
-		''' Calculate a noise realization in visibility space. Also save the noise internally for image calculation later.
+		''' Calculate a noise realization in visibility space. 
 
 		Kwargs:
-			* seed = None --- the random seed. If None, the Python default is used
+			* seed (int): The random seed. If None, the Python default is used
 
 		Returns:
-			* noise --- complex array of same dimensions as uv grid, containing real and imaginary noise in mK'''
+			complex array of same dimensions as uv grid, 
+			containing real and imaginary noise in mK'''
+
 		if uvgrid == None:
 			raise Exception('No uv grid specified')
 		noise = uvnoise.get_visibility_noise(self.get_tsys(), self.get_epsilon(), 
@@ -200,16 +207,19 @@ class Parameters:
 
 	def get_image_slice(self, visibility_slice=None):
 		'''
-		Calculate noise in image space, from the last visibility noise calculated. If no visibility 
-		noise has been supplied, a slice will be calculated, but not returned.
+		Calculate noise in image space. 
+		
+		If no visibility noise has been supplied, a slice will be calculated, 
+		but not returned.
 
 		Kwargs:
-			* visibility_slice = None --- the visibility slice to use as input. If none, a new
-			slice will be calculated
+			* visibility_slice (numpy array): the visibility slice to use as input. 
+			If none, a new slice will be calculated.
 
 		Returns:
-			* image --- real array with same dimensions as uv grid, in mK
+			real array with same dimensions as uv grid, in mK
 		'''
+
 		if visibility_slice == None:
 			visibility_slice = self.get_visibility_slice()
 		image = get_image.get_image(visibility_slice, self.get_fov())
@@ -225,9 +235,6 @@ class Parameters:
 		The extent along the frequency
 		axis is determined by d_nu and nu_range. To make a cube, first run
 		set_nu_range_cubic()
-		TODO: allow for uv-coverage recalculation for each frequency
-
-		Parameters:
 
 		Kwargs:
 			* seed (float): the random seed. If None, the Python default is used
@@ -355,8 +362,9 @@ class Parameters:
 
 	def get_psf(self):
 		''' Calculate the point spread function based on the
-		current uv grid. The psf is normalized so that the sum
-		is 1.
+		current uv grid. 
+		
+		The psf is normalized so that the sum is 1.
 
 		Returns:
 			* psf --- array with the same grid dimensions as uv_grid, self.get_fov() across '''
@@ -372,10 +380,10 @@ class Parameters:
 
 	def set_fov(self, fov):
 		'''
-		Set the physical area to give the desired field of view
+		Change the physical area to give the desired field of view
 
 		Parameters:
-			* fov --- the field of view in degrees
+			* fov (float): the desired field of view in degrees
 		'''
 
 		fov *= np.pi/180.

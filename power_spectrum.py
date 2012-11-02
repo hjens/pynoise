@@ -116,8 +116,9 @@ def power_spectrum_sphav(input_array_nd, box_size, bins=100, dimensionless=False
 	Example (generate noise, calculate and plot power spectrum):
 		>>> par = pn.params_from_file('myparams.bin')
 		>>> image = par.get_image_cube()
+		>>> image_w = par.get_physical_size()
 		>>> bins = 10**np.linspace(-2,1,15)
-		>>> ps,k = power_spectrum_sphav(image, bins=bins)
+		>>> ps,k = power_spectrum_sphav(image, image_w, bins=bins)
 		>>> pl.loglog(k,ps)
 	'''
 
