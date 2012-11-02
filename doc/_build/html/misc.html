@@ -1,0 +1,350 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Helper functions &mdash; pynoise 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pynoise 0.1 documentation" href="index.html" />
+    <link rel="prev" title="Power spectrum routines" href="powerspectrum.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="powerspectrum.html" title="Power spectrum routines"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">pynoise 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="helper-functions">
+<h1>Helper functions<a class="headerlink" href="#helper-functions" title="Permalink to this headline">¶</a></h1>
+<p>There are a number of helper functions to calculate various useful cosmological quantities.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Some of the helper functions assume that observations concern the redshifted 21 cm line.</p>
+</div>
+<span class="target" id="module-pynoise.helper_functions"></span><dl class="function">
+<dt id="pynoise.helper_functions.lumdist">
+<tt class="descclassname">pynoise.helper_functions.</tt><tt class="descname">lumdist</tt><big>(</big><em>z</em>, <em>k=0</em><big>)</big><a class="headerlink" href="#pynoise.helper_functions.lumdist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the luminosity distance for redshift z</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><ul class="first last simple">
+<li>z (float or numpy array): the redshift or redshifts</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd>The luminosity distance(s) in Mpc</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pynoise.helper_functions.zang">
+<tt class="descclassname">pynoise.helper_functions.</tt><tt class="descname">zang</tt><big>(</big><em>dl</em>, <em>z</em><big>)</big><a class="headerlink" href="#pynoise.helper_functions.zang" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the angular size of an object.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><ul class="first last simple">
+<li>dl (float): the physical size in kpc</li>
+<li>z (float): the redshift of the object</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd>Angle in arcseconds</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pynoise.helper_functions.cdist">
+<tt class="descclassname">pynoise.helper_functions.</tt><tt class="descname">cdist</tt><big>(</big><em>z</em><big>)</big><a class="headerlink" href="#pynoise.helper_functions.cdist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the comoving distance</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd>z (float): redshift</dd>
+<dt>Returns:</dt>
+<dd>Comoving distance in Mpc</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pynoise.helper_functions.cdist_to_z">
+<tt class="descclassname">pynoise.helper_functions.</tt><tt class="descname">cdist_to_z</tt><big>(</big><em>dist</em><big>)</big><a class="headerlink" href="#pynoise.helper_functions.cdist_to_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the redshift correspoding to the given redshift.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><ul class="first last simple">
+<li>dist (float): the distance in comoving Mpc</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><p class="first">redshift corresponding to the distance.</p>
+<p class="last">Uses a precalculated table for interpolation. Only valid for 
+0 &lt; z &lt; 100</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pynoise.helper_functions.nu_to_z">
+<tt class="descclassname">pynoise.helper_functions.</tt><tt class="descname">nu_to_z</tt><big>(</big><em>nu21</em><big>)</big><a class="headerlink" href="#pynoise.helper_functions.nu_to_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert 21 cm frequency in MHz to redshift</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><ul class="first last simple">
+<li>nu21 (float): redshifted 21 cm frequency in MHz</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd>Redshift</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pynoise.helper_functions.z_to_nu">
+<tt class="descclassname">pynoise.helper_functions.</tt><tt class="descname">z_to_nu</tt><big>(</big><em>z</em><big>)</big><a class="headerlink" href="#pynoise.helper_functions.z_to_nu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the 21 cm frequency that corresponds to redshift z</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><ul class="first last simple">
+<li>z (float): redshifts</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd>redshifted 21 cm frequency in MHz</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pynoise.helper_functions.nu_to_cdist">
+<tt class="descclassname">pynoise.helper_functions.</tt><tt class="descname">nu_to_cdist</tt><big>(</big><em>nu21</em><big>)</big><a class="headerlink" href="#pynoise.helper_functions.nu_to_cdist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the comoving distance to a given 21 cm frequency</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><ul class="first last simple">
+<li>nu21 (float): redshifted 21 cm frequency in MHz</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd>Comoving distance in Mpc</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pynoise.helper_functions.uv_to_k">
+<tt class="descclassname">pynoise.helper_functions.</tt><tt class="descname">uv_to_k</tt><big>(</big><em>uv</em>, <em>z</em><big>)</big><a class="headerlink" href="#pynoise.helper_functions.uv_to_k" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a point in uv space to the corresponding 
+k value.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><ul class="first last simple">
+<li>uv (float): distance in uv space</li>
+<li>z (float): redshift</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd>k value in Mpc^-1</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pynoise.helper_functions.k_to_uv">
+<tt class="descclassname">pynoise.helper_functions.</tt><tt class="descname">k_to_uv</tt><big>(</big><em>k</em>, <em>z</em><big>)</big><a class="headerlink" href="#pynoise.helper_functions.k_to_uv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a k value to the corresponding uv value</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><ul class="first last simple">
+<li>k (float): k value in Mpc^-1</li>
+<li>z (float): redshift</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd>distance in uv space</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pynoise.helper_functions.get_bandwidth">
+<tt class="descclassname">pynoise.helper_functions.</tt><tt class="descname">get_bandwidth</tt><big>(</big><em>z_central</em>, <em>depth_comov</em><big>)</big><a class="headerlink" href="#pynoise.helper_functions.get_bandwidth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the frequency difference between the near and far edge
+of a box.</p>
+<dl class="docutils">
+<dt>Paremeters:</dt>
+<dd><ul class="first last simple">
+<li>z_central (float): central redshift of the box</li>
+<li>depth_comov (float): comoving depth of the box in Mpc</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd>Frequency difference between the near and far edge of the box 
+in Mpc</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pynoise.helper_functions.get_smoothed_slice">
+<tt class="descclassname">pynoise.helper_functions.</tt><tt class="descname">get_smoothed_slice</tt><big>(</big><em>data</em>, <em>psf</em>, <em>periodic=False</em><big>)</big><a class="headerlink" href="#pynoise.helper_functions.get_smoothed_slice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Smooth a data slice with a given point spread function</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><ul class="first last simple">
+<li>data (numpy array): the array to smooth. Must have dimensions NxN</li>
+<li>psf (numpy array): the point spread function. Must have dimensions NxN</li>
+</ul>
+</dd>
+<dt>Kwargs:</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>periodic (bool): if True, the input data will be assumed to have</dt>
+<dd><p class="first last">periodic boundary conditions</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd>the smoothed array</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pynoise.helper_functions.apply_psf">
+<tt class="descclassname">pynoise.helper_functions.</tt><tt class="descname">apply_psf</tt><big>(</big><em>data</em>, <em>psf</em>, <em>los_axis=0</em>, <em>periodic=False</em><big>)</big><a class="headerlink" href="#pynoise.helper_functions.apply_psf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Smooth a data array with a given point spread function</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><ul class="first last simple">
+<li>data (numpy array): the array to smooth. May have dimensions NxN or NxNxM</li>
+<li>psf (numpy array): the point spread function. Must have dimensions NxN</li>
+</ul>
+</dd>
+<dt>Kwargs:</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>los_axis (int): if data is three-dimensional, this determines the </dt>
+<dd><p class="first last">frequency axis</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>periodic (bool): if True, the input data will be assumed to have</dt>
+<dd><p class="first last">periodic boundary conditions</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd>Smoothed box</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pynoise.helper_functions.params_from_file">
+<tt class="descclassname">pynoise.helper_functions.</tt><tt class="descname">params_from_file</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#pynoise.helper_functions.params_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load (unpickle) parameters object from file f</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><ul class="first simple">
+<li>f (binary file object or filename string): the file</li>
+</ul>
+<p class="last">to load from.</p>
+</dd>
+<dt>Returns:</dt>
+<dd>The loaded object</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pynoise.helper_functions.ldist">
+<tt class="descclassname">pynoise.helper_functions.</tt><tt class="descname">ldist</tt><big>(</big><em>z</em><big>)</big><a class="headerlink" href="#pynoise.helper_functions.ldist" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is used for the integration in lumdist 
+Only meant for internal use</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="powerspectrum.html"
+                        title="previous chapter">Power spectrum routines</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/misc.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="powerspectrum.html" title="Power spectrum routines"
+             >previous</a> |</li>
+        <li><a href="index.html">pynoise 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Hannes Jensen.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,186 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Power spectrum routines &mdash; pynoise 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pynoise 0.1 documentation" href="index.html" />
+    <link rel="next" title="Helper functions" href="misc.html" />
+    <link rel="prev" title="Visualizing results" href="plotting.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="misc.html" title="Helper functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="plotting.html" title="Visualizing results"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">pynoise 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="power-spectrum-routines">
+<h1>Power spectrum routines<a class="headerlink" href="#power-spectrum-routines" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pynoise.power_spectrum_sphav">
+<tt class="descclassname">pynoise.</tt><tt class="descname">power_spectrum_sphav</tt><big>(</big><em>input_array_nd</em>, <em>box_size</em>, <em>bins=100</em>, <em>dimensionless=False</em>, <em>weights=None</em><big>)</big><a class="headerlink" href="#pynoise.power_spectrum_sphav" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the spherically averaged power spectrum</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><ul class="first simple">
+<li>input_array_nd  (numpy array): the data array</li>
+<li>box_size  (float or list-like): size of the box in comoving Mpc.</li>
+</ul>
+<p class="last">Can be a single number or a tuple giving the size along each axis</p>
+</dd>
+<dt>Kwargs:</dt>
+<dd><ul class="first last">
+<li><p class="first">bins (int or list-like): can be an array of k bin edges or a number of bins.</p>
+</li>
+<li><dl class="first docutils">
+<dt>dimensionless (bool) if true, the dimensionless powerspectrum, k^3/(2pi^2)P(k),</dt>
+<dd><p class="first last">is returned</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>weights (numpy array): if given, these are the weights applied to the points</dt>
+<dd><p class="first last">when calculating the power spectrum. Can be calculated in the 
+parameter structure.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt>Returns</dt>
+<dd><p class="first">Tuple with ps, k</p>
+<p class="last">ps is the power spectrum, P(k) or Delta^2(k) and k is the mid points
+of the k bins in Mpc^-1</p>
+</dd>
+<dt>Example (generate noise, calculate and plot power spectrum):</dt>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">par</span> <span class="o">=</span> <span class="n">pn</span><span class="o">.</span><span class="n">params_from_file</span><span class="p">(</span><span class="s">&#39;myparams.bin&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">image</span> <span class="o">=</span> <span class="n">par</span><span class="o">.</span><span class="n">get_image_cube</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">image_w</span> <span class="o">=</span> <span class="n">par</span><span class="o">.</span><span class="n">get_physical_size</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bins</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">15</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ps</span><span class="p">,</span><span class="n">k</span> <span class="o">=</span> <span class="n">power_spectrum_sphav</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">image_w</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pl</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">ps</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pynoise.power_spectrum_nd">
+<tt class="descclassname">pynoise.</tt><tt class="descname">power_spectrum_nd</tt><big>(</big><em>input_array</em>, <em>box_dims</em><big>)</big><a class="headerlink" href="#pynoise.power_spectrum_nd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the n-dimensional power spectrum</p>
+<p>The input array does not need to be cubical, but the 
+individual cells must have the same size along all axes.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><ul class="first simple">
+<li>input_array (numpy array): the array to calculate PS from</li>
+<li>box_dims  (list-like) tuple with the size of the box in</li>
+</ul>
+<p class="last">comoving Mpc along each axis</p>
+</dd>
+<dt>Returns:</dt>
+<dd>The power spectrum as a numpy array of the same dimensions
+as the input array.</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="plotting.html"
+                        title="previous chapter">Visualizing results</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="misc.html"
+                        title="next chapter">Helper functions</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/powerspectrum.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="misc.html" title="Helper functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="plotting.html" title="Visualizing results"
+             >previous</a> |</li>
+        <li><a href="index.html">pynoise 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Hannes Jensen.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

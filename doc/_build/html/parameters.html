@@ -1,0 +1,521 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The Parameters structure &mdash; pynoise 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pynoise 0.1 documentation" href="index.html" />
+    <link rel="next" title="Visualizing results" href="plotting.html" />
+    <link rel="prev" title="Tutorial" href="tutorial.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plotting.html" title="Visualizing results"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Tutorial"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">pynoise 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-parameters-structure">
+<h1>The Parameters structure<a class="headerlink" href="#the-parameters-structure" title="Permalink to this headline">¶</a></h1>
+<p>Description of the Parameters structure.</p>
+<dl class="class">
+<dt id="pynoise.Parameters">
+<em class="property">class </em><tt class="descclassname">pynoise.</tt><tt class="descname">Parameters</tt><a class="headerlink" href="#pynoise.Parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class acts as a storage unit for various instrument and 
+experiment parameters.</p>
+<p>It is used to generate the noise realizations in image and visibility
+space.</p>
+<dl class="method">
+<dt id="pynoise.Parameters.print_params">
+<tt class="descname">print_params</tt><big>(</big><big>)</big><a class="headerlink" href="#pynoise.Parameters.print_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the current values of all parameters</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.save_to_file">
+<tt class="descname">save_to_file</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.save_to_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save (pickle) parameters object to file f</p>
+<p>Parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li>f (binary file or filename): the file to write to</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.set_uv_grid_from_telescopes">
+<tt class="descname">set_uv_grid_from_telescopes</tt><big>(</big><em>tel_positions</em>, <em>ha_range</em>, <em>decl=90</em>, <em>ha_step=50</em>, <em>mirror_points=False</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.set_uv_grid_from_telescopes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the uv coverage of a telescope array and set the uv_array parameter.</p>
+<p>Parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li>tel_positions &#8212; array with telescope x,y,z positions in m, cartesian geocentric coordinates</li>
+</ul>
+<p>Must have the shape (N,3) where N is the number of telescopes. Can also be a string specifying a text file with the telescope positions
+* ha_range &#8212; tuple with start and stop hour angle (in hours)</p>
+</div></blockquote>
+<p>Kwargs:</p>
+<blockquote>
+<div><ul class="simple">
+<li>ha_step = 50 &#8212; time resolution in uv calculation in seconds</li>
+<li>decl = 90 &#8212; declination of the source, in degrees</li>
+<li>mirror_points = False &#8212; whether to include (-u,-v) points</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.set_uv_grid_from_function">
+<tt class="descname">set_uv_grid_from_function</tt><big>(</big><em>rho_uv</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.set_uv_grid_from_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the uv coverage based on a radial function and set the uv_array parameter.</p>
+<p>Parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li>rho_uv &#8212; callable taking one parameter. The function should give the baseline</li>
+</ul>
+<p>density as a function of baseline length.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.set_uv_grid_from_antenna_distribution">
+<tt class="descname">set_uv_grid_from_antenna_distribution</tt><big>(</big><em>rho_ant</em>, <em>num_points_phi=301</em>, <em>num_points_r=2001</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.set_uv_grid_from_antenna_distribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate and set the uv coverage grid from a function of r giving the 
+antenna density as a function of distance from the array center.</p>
+<p>Still somewhat experimental. Please check the results for numerical
+problems.</p>
+<p>Parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li>rho_ant (callable taking one parameter): This function should give the</li>
+</ul>
+<p>density of antennae in the array as a function of distance (in meters) 
+from the array center</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>Kwargs:</dt>
+<dd><ul class="first last simple">
+<li>num_points_phi (int): number of sample points for phi when integrating</li>
+<li>num_points_r (int): number of sample points for r when integrating</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.get_uv_weights">
+<tt class="descname">get_uv_weights</tt><big>(</big><em>los_axis=0</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.get_uv_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get weights for use with the powerspectrum routines</p>
+<dl class="docutils">
+<dt>Kwargs:</dt>
+<dd><ul class="first last simple">
+<li>los_axis (int): the line-of-sight axis</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd>weights</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.set_uv_taper">
+<tt class="descname">set_uv_taper</tt><big>(</big><em>taper_func</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.set_uv_taper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a uv tapering function.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><ul class="first simple">
+<li>taper_func (callable): A function of one variable - the</li>
+</ul>
+<p class="last">baseline length in wavelengths - which will be multiplied
+with the uv grid</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.get_visibility_slice">
+<tt class="descname">get_visibility_slice</tt><big>(</big><em>seed=None</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.get_visibility_slice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate a noise realization in visibility space.</p>
+<dl class="docutils">
+<dt>Kwargs:</dt>
+<dd><ul class="first last simple">
+<li>seed (int): The random seed. If None, the Python default is used</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd>complex array of same dimensions as uv grid, 
+containing real and imaginary noise in mK</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.get_image_slice">
+<tt class="descname">get_image_slice</tt><big>(</big><em>visibility_slice=None</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.get_image_slice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate noise in image space.</p>
+<p>If no visibility noise has been supplied, a slice will be calculated, 
+but not returned.</p>
+<dl class="docutils">
+<dt>Kwargs:</dt>
+<dd><ul class="first simple">
+<li>visibility_slice (numpy array): the visibility slice to use as input.</li>
+</ul>
+<p class="last">If none, a new slice will be calculated.</p>
+</dd>
+<dt>Returns:</dt>
+<dd>real array with same dimensions as uv grid, in mK</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.get_visibility_cube">
+<tt class="descname">get_visibility_cube</tt><big>(</big><em>nu_dep=False</em>, <em>seed=None</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.get_visibility_cube" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate a noise cube in visibility space.</p>
+<p>The extent along the frequency
+axis is determined by d_nu and nu_range. To make a cube, first run
+set_nu_range_cubic()</p>
+<dl class="docutils">
+<dt>Kwargs:</dt>
+<dd><ul class="first last">
+<li><p class="first">seed (float): the random seed. If None, the Python default is used</p>
+</li>
+<li><dl class="first docutils">
+<dt>nu_dep (bool): if True, the central frequency will change for each slice, </dt>
+<dd><p class="first last">going from nu_range[0] to nu_range[1]. If False, the current 
+value of the central frequency will be used for the entire cube.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>(complex numpy array): Noise cube in visibility space </dt>
+<dd><p class="first last">with frequency as the first index (lowest frequency first).</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.get_image_cube">
+<tt class="descname">get_image_cube</tt><big>(</big><em>visibility_cube=None</em>, <em>nu_dep=False</em>, <em>seed=None</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.get_image_cube" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate a noise cube in image space.</p>
+<p>The calculation is based on the visibility_noise cube supplied. 
+If this is None, a visibility noise cube is calculated.</p>
+<dl class="docutils">
+<dt>Kwargs:</dt>
+<dd><ul class="first">
+<li><p class="first">visibility_cube (numpy array): the visibility cube to use</p>
+</li>
+<li><dl class="first docutils">
+<dt>nu_dep (bool): if True, the central frequency will change for each slice, </dt>
+<dd><p class="first last">going from nu_range[0] to nu_range[1]. If False, the current 
+value of the central frequency will be used for the entire cube.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p class="last">as input. If None, a temporary cube will be calculated.
+* seed (float): the random seed. If None, the Python default is used</p>
+</dd>
+<dt>Returns:</dt>
+<dd>(numpy array): Noise cube in image space with frequency as the first index.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.get_wavel">
+<tt class="descname">get_wavel</tt><big>(</big><big>)</big><a class="headerlink" href="#pynoise.Parameters.get_wavel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get wavelength in m</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.get_z">
+<tt class="descname">get_z</tt><big>(</big><big>)</big><a class="headerlink" href="#pynoise.Parameters.get_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get redshift</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.get_fov">
+<tt class="descname">get_fov</tt><big>(</big><big>)</big><a class="headerlink" href="#pynoise.Parameters.get_fov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the field of view</p>
+<p>This is calculated as the wavelength divided by the
+physical diameter of an antenna.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>float: The field of view in degrees</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.set_nu_range_cubic">
+<tt class="descname">set_nu_range_cubic</tt><big>(</big><big>)</big><a class="headerlink" href="#pynoise.Parameters.set_nu_range_cubic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the parameters nu_range and dnu so that the
+result of get_noise_cube and get_image_cube have the same
+comoving extent along the frequency axis as along the sides
+The uv grid must be set prior to running this method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.get_psf">
+<tt class="descname">get_psf</tt><big>(</big><big>)</big><a class="headerlink" href="#pynoise.Parameters.get_psf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the point spread function based on the
+current uv grid.</p>
+<p>The psf is normalized so that the sum is 1.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>psf &#8212; array with the same grid dimensions as uv_grid, self.get_fov() across</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.set_fov">
+<tt class="descname">set_fov</tt><big>(</big><em>fov</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.set_fov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the physical area to give the desired field of view</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><ul class="first last simple">
+<li>fov (float): the desired field of view in degrees</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.get_physical_size">
+<tt class="descname">get_physical_size</tt><big>(</big><big>)</big><a class="headerlink" href="#pynoise.Parameters.get_physical_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the physical size of the box</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>box size in comoving Mpc</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.set_epsilon">
+<tt class="descname">set_epsilon</tt><big>(</big><em>epsilon</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.set_epsilon" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.get_epsilon">
+<tt class="descname">get_epsilon</tt><big>(</big><big>)</big><a class="headerlink" href="#pynoise.Parameters.get_epsilon" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.set_tsys">
+<tt class="descname">set_tsys</tt><big>(</big><em>Tsys</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.set_tsys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.get_tsys">
+<tt class="descname">get_tsys</tt><big>(</big><big>)</big><a class="headerlink" href="#pynoise.Parameters.get_tsys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.set_dnu">
+<tt class="descname">set_dnu</tt><big>(</big><em>dnu</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.set_dnu" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.get_dnu">
+<tt class="descname">get_dnu</tt><big>(</big><big>)</big><a class="headerlink" href="#pynoise.Parameters.get_dnu" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.set_aphys">
+<tt class="descname">set_aphys</tt><big>(</big><em>Aphys</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.set_aphys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.get_aphys">
+<tt class="descname">get_aphys</tt><big>(</big><big>)</big><a class="headerlink" href="#pynoise.Parameters.get_aphys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.set_aeff">
+<tt class="descname">set_aeff</tt><big>(</big><em>Aeff</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.set_aeff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.get_aeff">
+<tt class="descname">get_aeff</tt><big>(</big><big>)</big><a class="headerlink" href="#pynoise.Parameters.get_aeff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.set_nu_c">
+<tt class="descname">set_nu_c</tt><big>(</big><em>nu_c</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.set_nu_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.get_nu_c">
+<tt class="descname">get_nu_c</tt><big>(</big><big>)</big><a class="headerlink" href="#pynoise.Parameters.get_nu_c" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.set_t">
+<tt class="descname">set_t</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.set_t" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.get_t">
+<tt class="descname">get_t</tt><big>(</big><big>)</big><a class="headerlink" href="#pynoise.Parameters.get_t" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.get_uv_grid">
+<tt class="descname">get_uv_grid</tt><big>(</big><big>)</big><a class="headerlink" href="#pynoise.Parameters.get_uv_grid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.set_uv_grid">
+<tt class="descname">set_uv_grid</tt><big>(</big><em>uv_grid</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.set_uv_grid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.set_num_tel">
+<tt class="descname">set_num_tel</tt><big>(</big><em>num_tel</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.set_num_tel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.get_num_tel">
+<tt class="descname">get_num_tel</tt><big>(</big><big>)</big><a class="headerlink" href="#pynoise.Parameters.get_num_tel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.set_uv_range">
+<tt class="descname">set_uv_range</tt><big>(</big><em>uv_range</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.set_uv_range" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.get_uv_range">
+<tt class="descname">get_uv_range</tt><big>(</big><big>)</big><a class="headerlink" href="#pynoise.Parameters.get_uv_range" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.get_nu_range">
+<tt class="descname">get_nu_range</tt><big>(</big><big>)</big><a class="headerlink" href="#pynoise.Parameters.get_nu_range" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.set_nu_range">
+<tt class="descname">set_nu_range</tt><big>(</big><em>nu_range</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.set_nu_range" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.get_num_pol">
+<tt class="descname">get_num_pol</tt><big>(</big><big>)</big><a class="headerlink" href="#pynoise.Parameters.get_num_pol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.set_num_pol">
+<tt class="descname">set_num_pol</tt><big>(</big><em>num_pol</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.set_num_pol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tutorial.html"
+                        title="previous chapter">Tutorial</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="plotting.html"
+                        title="next chapter">Visualizing results</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/parameters.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plotting.html" title="Visualizing results"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Tutorial"
+             >previous</a> |</li>
+        <li><a href="index.html">pynoise 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Hannes Jensen.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

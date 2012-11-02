@@ -1,0 +1,201 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Visualizing results &mdash; pynoise 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pynoise 0.1 documentation" href="index.html" />
+    <link rel="next" title="Power spectrum routines" href="powerspectrum.html" />
+    <link rel="prev" title="The Parameters structure" href="parameters.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="powerspectrum.html" title="Power spectrum routines"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="parameters.html" title="The Parameters structure"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">pynoise 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="visualizing-results">
+<h1>Visualizing results<a class="headerlink" href="#visualizing-results" title="Permalink to this headline">¶</a></h1>
+<p>You may of course use the visualization software of your choice to plot the results, but <tt class="xref py py-mod docutils literal"><span class="pre">pynoise</span></tt> also includes some simple routines for some of the most common tasks. These routines all rely on <tt class="xref py py-mod docutils literal"><span class="pre">matplotlib</span></tt> for the plotting.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you are running these commands from a Python shell, you may also need to run the <tt class="xref py py-mod docutils literal"><span class="pre">matplotlib</span></tt> command <tt class="xref py py-func docutils literal"><span class="pre">show()</span></tt> to actually show the plots. This depends on your local setup.</p>
+</div>
+<dl class="function">
+<dt id="pynoise.plot_visibility_slice">
+<tt class="descclassname">pynoise.</tt><tt class="descname">plot_visibility_slice</tt><big>(</big><em>parameters</em>, <em>visibility_slice=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#pynoise.plot_visibility_slice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an image plot of a visibility slice.</p>
+<p>Only the real part is plotted</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><ul class="first simple">
+<li>parameters (Parameters structure) : the structure holding</li>
+</ul>
+<p class="last">the parameters</p>
+</dd>
+<dt>Kwargs:</dt>
+<dd><ul class="first simple">
+<li>visibility_slice (numpy array) : the slice to plot. If none is given,</li>
+</ul>
+<p class="last">a slice is generated from the Parameters structure.</p>
+</dd>
+</dl>
+<p>Additional kwargs are passed to imshow</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pynoise.plot_psf">
+<tt class="descclassname">pynoise.</tt><tt class="descname">plot_psf</tt><big>(</big><em>parameters</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#pynoise.plot_psf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an image plot of the point spread function</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>parameters (Parameters structure) &#8212; the structure holding the </dt>
+<dd><p class="first last">parameters</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pynoise.plot_image_slice">
+<tt class="descclassname">pynoise.</tt><tt class="descname">plot_image_slice</tt><big>(</big><em>parameters</em>, <em>image_slice=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#pynoise.plot_image_slice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an image plot of a image slice.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><ul class="first simple">
+<li>parameters (Parameters structure) : the structure holding</li>
+</ul>
+<p class="last">the parameters</p>
+</dd>
+<dt>Kwargs:</dt>
+<dd><ul class="first simple">
+<li>image_slice (numpy array) : the slice to plot. If none is given,</li>
+</ul>
+<p class="last">a slice is generated from the Parameters structure.</p>
+</dd>
+</dl>
+<p>Additional kwargs are passed to imshow</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pynoise.plot_uv_coverage">
+<tt class="descclassname">pynoise.</tt><tt class="descname">plot_uv_coverage</tt><big>(</big><em>parameters</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#pynoise.plot_uv_coverage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an image plot of the uv coverage of a Parameters structure</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>parameters (Parameters structure) &#8212; the structure holding the </dt>
+<dd><p class="first last">parameters</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="parameters.html"
+                        title="previous chapter">The Parameters structure</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="powerspectrum.html"
+                        title="next chapter">Power spectrum routines</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/plotting.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="powerspectrum.html" title="Power spectrum routines"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="parameters.html" title="The Parameters structure"
+             >previous</a> |</li>
+        <li><a href="index.html">pynoise 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Hannes Jensen.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
