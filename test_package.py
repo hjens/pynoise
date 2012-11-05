@@ -37,20 +37,10 @@ par.set_aeff(aeff)
 
 par.print_params()
 
-image  = par.get_image_cube(nu_dep=True)
+#image  = par.get_image_cube(nu_dep=True)
 
+image_m51 = par.get_psf_smoothed_image('m51_bw.png')
 
-pl.figure()
-pn.plot_image_slice(par, image[0,:,:])
-print image[0,:,:].std()
-pl.figure()
-pn.plot_image_slice(par, image[-1,:,:])
-print image[-1,:,:].std()
-
-pl.figure()
-pn.plot_uv_coverage_radial(par)
-
-pl.figure()
-pn.plot_psf(par)
+pl.imshow(image_m51)
 
 pl.show()

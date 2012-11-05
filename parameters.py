@@ -308,7 +308,44 @@ class Parameters:
 
 		return image_cube
 
+	#----------- Image an object ------------------------------
 
+	def get_psf_smoothed_image(self, image_orig, image_fov = None):
+		'''
+		Smooth an image with the current point spread function.
+
+		Parameters:
+			* image_origin (numpy array or filename string): the pristine
+			image. If this is a string, it is interpreted as a filename (can
+			be an image file or a binary data file).
+
+		Kwargs:
+			* image_fov (float): the extent of the image on the sky, in 
+			degrees. If this is None, it is assumed to be the same as the FoV
+			of the interferometer.
+
+		Returns:
+			(numpy_array): the image smoothed with the PSF	
+		'''
+
+		#If the image is a string, try to read the image file
+		if isinstance(image_orig, str):
+			try:
+				import Image
+				im = Image.open(image_orig).convert('RGB')
+				im = im.resize(self.get_uv_grid().shape)
+				r,g,b = im.split()
+				image_orig = (np.asarray(r)+np.asarray(g)+np.asarray(b))/3.
+				image_orig = image_orig.astype('float')
+			except:
+				image_orig = np.fromfile(image_orig)
+				n = round(image_orig.shape[0]**(1./2.))
+				image_orig = image_orig.reshape((n,n))
+
+		#Smooth the image
+		smoothed = hf.get_smoothed_slice(image_orig, self.get_psf(), periodic=False)
+
+		return smoothed
 	#----------- Calculate various useful quantities ----------
 
 	def get_wavel(self):
