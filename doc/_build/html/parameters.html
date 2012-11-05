@@ -84,7 +84,7 @@ space.</p>
 <dl class="method">
 <dt id="pynoise.Parameters.set_uv_grid_from_telescopes">
 <tt class="descname">set_uv_grid_from_telescopes</tt><big>(</big><em>tel_positions</em>, <em>ha_range</em>, <em>decl=90</em>, <em>ha_step=50</em>, <em>mirror_points=False</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.set_uv_grid_from_telescopes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the uv coverage of a telescope array and set the uv_array parameter.</p>
+<dd><p>Calculate the uv coverage of a telescope array and set the uv_grid parameter.</p>
 <p>Parameters:</p>
 <blockquote>
 <div><ul class="simple">
@@ -106,7 +106,7 @@ space.</p>
 <dl class="method">
 <dt id="pynoise.Parameters.set_uv_grid_from_function">
 <tt class="descname">set_uv_grid_from_function</tt><big>(</big><em>rho_uv</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.set_uv_grid_from_function" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the uv coverage based on a radial function and set the uv_array parameter.</p>
+<dd><p>Calculate the uv coverage based on a radial function and set the uv_grid parameter.</p>
 <p>Parameters:</p>
 <blockquote>
 <div><ul class="simple">
@@ -263,6 +263,30 @@ value of the central frequency will be used for the entire cube.</p>
 </dd>
 <dt>Returns:</dt>
 <dd>(numpy array): Noise cube in image space with frequency as the first index.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pynoise.Parameters.get_psf_smoothed_image">
+<tt class="descname">get_psf_smoothed_image</tt><big>(</big><em>image_orig</em>, <em>image_fov=None</em><big>)</big><a class="headerlink" href="#pynoise.Parameters.get_psf_smoothed_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Smooth an image with the current point spread function.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><ul class="first simple">
+<li>image_origin (numpy array or filename string): the pristine</li>
+</ul>
+<p class="last">image. If this is a string, it is interpreted as a filename (can
+be an image file or a binary data file).</p>
+</dd>
+<dt>Kwargs:</dt>
+<dd><ul class="first simple">
+<li>image_fov (float): the extent of the image on the sky, in</li>
+</ul>
+<p class="last">degrees. If this is None, it is assumed to be the same as the FoV
+of the interferometer.</p>
+</dd>
+<dt>Returns:</dt>
+<dd>(numpy_array): the image smoothed with the PSF</dd>
 </dl>
 </dd></dl>
 
