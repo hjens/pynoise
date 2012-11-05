@@ -73,23 +73,32 @@ class Parameters:
 
 	#-------------- Methods for calculating the uv grid	 --------------
 	def set_uv_grid_from_telescopes(self, tel_positions, ha_range, decl = 90, 
-			ha_step = 50, mirror_points=False):
+			ha_step = 50, mirror_points=False, coordinates='cartesian'):
 		'''
 		Calculate the uv coverage of a telescope array and set the uv_grid parameter.
 
 		Parameters:
 
-			* tel_positions --- array with telescope x,y,z positions in m, cartesian geocentric coordinates
+			* tel_positions (numpy array): array with telescope x,y,z positions in m, 
+			cartesian geocentric coordinates, or north-east positions
 			Must have the shape (N,3) where N is the number of telescopes. Can also be a string specifying a text file with the telescope positions
-			* ha_range --- tuple with start and stop hour angle (in hours)
+			* ha_range (tuple with two elements): tuple with start and stop hour angle (in hours)
 
 		Kwargs:
 
-			* ha_step = 50 --- time resolution in uv calculation in seconds
-			* decl = 90 --- declination of the source, in degrees
-			* mirror_points = False --- whether to include (-u,-v) points
+			* ha_step (float): time resolution in uv calculation in seconds
+			* decl (float): declination of the source, in degrees
+			* mirror_points (bool): whether to include (-u,-v) points
+			* coordinates (string): the coordinate system for the antenna positions. Can be
+			'cartesian' or 'north-east'
 
 		'''
+
+		#Make sure coordinates are correct
+		if (coordinates != 'cartesian' and coordinates != 'north-east'):
+			print 'Invalid coordinate type:', coordinates
+			print 'Valid coordinates systems are \'cartesian\' and \'north-east\'.'
+			raise Exception
 
 		#Check if we should first read the telescope positions
 		if type(tel_positions) == str:
@@ -99,7 +108,7 @@ class Parameters:
 
 		#Calculate the grid
 		grid = uvgrid.get_uv_grid_from_telescopes(pos, self.get_fov(), self.get_nu_c(),
-				ha_range, decl, ha_step, self.get_uv_range(), mirror_points) 
+				ha_range, decl, ha_step, self.get_uv_range(), mirror_points, coordinates) 
 		self._uv_grid = grid
 
 
@@ -329,7 +338,7 @@ class Parameters:
 		'''
 
 		#If the image is a string, try to read the image file
-		if isinstance(image_orig, str):
+		if type(image_orig) ==  str:
 			try:
 				import Image
 				im = Image.open(image_orig).convert('RGB')
@@ -341,6 +350,8 @@ class Parameters:
 				image_orig = np.fromfile(image_orig)
 				n = round(image_orig.shape[0]**(1./2.))
 				image_orig = image_orig.reshape((n,n))
+
+		#TODO: allow for other image_fov
 
 		#Smooth the image
 		smoothed = hf.get_smoothed_slice(image_orig, self.get_psf(), periodic=False)

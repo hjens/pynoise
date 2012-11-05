@@ -47,7 +47,7 @@ def get_uv_grid_from_function(rho_uv, fov, uv_range = 2000.):
 
 	return norm_grid
 
-def get_uv_grid_from_telescopes(tel_positions, fov, nu_c, ha_range, decl = 90, ha_step = 50, uv_range = 2000, mirror_points=False):
+def get_uv_grid_from_telescopes(tel_positions, fov, nu_c, ha_range, decl = 90, ha_step = 50, uv_range = 2000, mirror_points=False, coordinates='cartesian'):
 	'''
 	Calculate the uv coverage of a telescope array.
 		* tel_positions --- array with telescope x,y,z positions in m, cartesian geocentric coordinates
@@ -63,7 +63,7 @@ def get_uv_grid_from_telescopes(tel_positions, fov, nu_c, ha_range, decl = 90, h
 		* mirror_points = False --- whether to include (-u,-v) points
 
 	Returns:
-		* uv grid, normalized so that the integral i 1
+		* uv grid, normalized so that the integral is 1
 	'''
 
 
@@ -85,17 +85,29 @@ def get_uv_grid_from_telescopes(tel_positions, fov, nu_c, ha_range, decl = 90, h
 
 	print 'Calculating uvw coverage...'
 	#Construct uvw matrix for all hour angles
-	for hn in h:
-		proj_mtrx = np.array([
-			[sin(hn), 			cos(hn),			0],
-			[-sin(d)*cos(hn),	sin(hn)*sin(d),		cos(d)],
-			[cos(d)*cos(hn),	-cos(d)*sin(hn), 	sin(d)]  
-			])
-		uvwn = np.dot(proj_mtrx, baselines)
-		uvw = np.hstack([uvw, uvwn])
-		#Add mirror points
-		if mirror_points:
-			uvw = np.hstack([uvw, -uvwn]) 
+	if coordinates == 'cartesian':
+		for hn in h:
+			proj_mtrx = np.array([
+				[sin(hn), 			cos(hn),			0],
+				[-sin(d)*cos(hn),	sin(hn)*sin(d),		cos(d)],
+				[cos(d)*cos(hn),	-cos(d)*sin(hn), 	sin(d)]  
+				])
+			uvwn = np.dot(proj_mtrx, baselines)
+			uvw = np.hstack([uvw, uvwn])
+			#Add mirror points
+			if mirror_points:
+				uvw = np.hstack([uvw, -uvwn]) 
+	else:
+		l = 90.-decl #TODO:check this
+		for hn in h:
+			proj_mtrx = np.array([[ -sin(l)*sin(hn), cos(hn), cos(l)*sin(hn)], 
+				[sin(l)*cos(hn)*sin(d)+cos(l)*cos(d), sin(hn)*sin(d), -cos(l)*cos(hn)* sin(d)+sin(l)*cos(d)], 
+				[-sin(l)*cos(hn)*cos(d)+cos(l)*sin(d), -sin(hn)*cos(d), cos(l)*cos(hn)*   cos(d)+sin(l)*sin(d)]])
+			uvwn = np.dot(proj_mtrx, baselines)
+			uvw = np.hstack([uvw, uvwn])
+			#Add mirror points
+			if mirror_points:
+				uvw = np.hstack([uvw, -uvwn]) 
 
 	wavel = 300./nu_c
 	uvw /= wavel
@@ -107,6 +119,11 @@ def get_uv_grid_from_telescopes(tel_positions, fov, nu_c, ha_range, decl = 90, h
 	gridn = int(round((uv_range/delta_u)))
 	uedges = np.linspace(-gridmax,gridmax,gridn+1)
 	vedges = np.linspace(-gridmax,gridmax,gridn+1)
+
+	import pylab as pl
+	print uv.shape
+	pl.scatter(uv[:,0], uv[:,1])
+	pl.show()
 
 	uv_grid, bins = np.histogramdd(uv, bins=[uedges,vedges])
 
