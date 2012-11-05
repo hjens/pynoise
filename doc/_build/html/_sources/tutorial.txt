@@ -52,7 +52,7 @@ Let's make a very simple uv coverage: constant coverage out to u = 500, then zer
 >>> uv = lambda u : u < 500
 >>> par.set_uv_grid_from_function(uv)
 
-Note that all methods are documented through their Python docstrings. To see the documentation for a method without leaving the shell, just type ``print par.set_uv_grid_from_funcion.__doc__``. Or, if you are using IPython, use the shorthand form: ``par.set_uv_grid_from_funcion?``.
+Note that all methods are documented through their Python docstrings. To see the documentation for a method without leaving the shell, just type ``print par.set_uv_grid_from_function.__doc__``. Or, if you are using IPython, use the shorthand form: ``par.set_uv_grid_from_function?``.
 
 If you have :mod:`matplotlib` installed, you can visualize the uv coverage:
 
