@@ -75,7 +75,7 @@ class Parameters:
 	def set_uv_grid_from_telescopes(self, tel_positions, ha_range, decl = 90, 
 			ha_step = 50, mirror_points=False):
 		'''
-		Calculate the uv coverage of a telescope array and set the uv_array parameter.
+		Calculate the uv coverage of a telescope array and set the uv_grid parameter.
 
 		Parameters:
 
@@ -105,7 +105,7 @@ class Parameters:
 
 	def set_uv_grid_from_function(self, rho_uv):
 		'''
-		Calculate the uv coverage based on a radial function and set the uv_array parameter.
+		Calculate the uv coverage based on a radial function and set the uv_grid parameter.
 
 		Parameters:
 
