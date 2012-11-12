@@ -4,6 +4,8 @@ import uvnoise
 import get_image
 import helper_functions as hf
 import cPickle as pickle
+import marshal
+import types
 
 class Parameters:
 	''' This class acts as a storage unit for various instrument and 
@@ -69,6 +71,50 @@ class Parameters:
 			fi = f
 		pickle.dump(self,fi)
 		fi.close()
+
+	def __getstate__(self):
+		odict = self.__dict__.copy()
+		#Delete function objects from dictionary and save them as strings
+		if self._uv_taper != None:
+			del odict['_uv_taper']
+			odict['_uv_taper_str'] = marshal.dumps(self._uv_taper.func_code)
+
+		if hasattr(self._Aeff, '__call__'):
+			del odict['_Aeff']
+			odict['_Aeff_str'] = marshal.dumps(self._Aeff.func_code)
+
+		if hasattr(self._Tsys, '__call__'):
+			del odict['_Tsys']
+			odict['_Tsys_str'] = marshal.dumps(self._Tsys.func_code)
+
+		return odict
+
+	def __setstate__(self, dict):
+		try:
+			uv_taper_code = marshal.loads(dict['_uv_taper_str'])
+			self._uv_taper = types.FunctionType(uv_taper_code, globals())
+		except:
+			print 'Warning: could not restore uv taper function from saved Parameters file'
+			self._uv_taper = None
+
+		if '_Aeff_str' in dict.keys():
+			try:
+				aeff_code = marshal.loads(dict['_Aeff_str'])
+				self._Aeff = types.FunctionType(aeff_code, globals())
+			except:
+				print 'Warning: could not restore Aeff function from saved Parameters file. Reverting to default value.'
+				self.set_aeff(500.)
+
+
+		if '_Tsys_str' in dict.keys():
+			try:
+				tsys_code = marshal.loads(dict['_Tsys_str'])
+				self._Tsys = types.FunctionType(tsys_code, globals())
+			except:
+				print 'Warning: could not restore Tsys function from saved Parameters file. Reverting to default value.'
+				self.set_tsys(350.)
+
+		self.__dict__.update(dict)
 
 
 	#-------------- Methods for calculating the uv grid	 --------------
@@ -521,3 +567,6 @@ class Parameters:
 			self._num_pol = num_pol
 		else:
 			print 'WARNING: invalid number of polarizations: %d' % num_pol
+
+	def get_uv_taper(self):
+		return self._uv_taper()

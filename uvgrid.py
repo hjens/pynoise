@@ -121,9 +121,6 @@ def get_uv_grid_from_telescopes(tel_positions, fov, nu_c, ha_range, decl = 90, h
 	vedges = np.linspace(-gridmax,gridmax,gridn+1)
 
 	import pylab as pl
-	print uv.shape
-	pl.scatter(uv[:,0], uv[:,1])
-	pl.show()
 
 	uv_grid, bins = np.histogramdd(uv, bins=[uedges,vedges])
 
